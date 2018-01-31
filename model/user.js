@@ -10,3 +10,6 @@ const UserSchema = new Schema({
      },
      create_time: Date
 })
+const UserModel = mongoose.model('user',UserSchema)
+
+module.exports = UserModel;
