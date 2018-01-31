@@ -39,7 +39,6 @@ const Login = async (ctx,next)=>{
     let username = ctx.request.body.username;
     let password = new Hashes.SHA1().b64(ctx.request.body.password);
     let doc = await findUser(username);
-    console.log(doc)
     if(!doc){
         console.log('检查到用户名不存在');
         ctx.status = 200;
@@ -48,7 +47,6 @@ const Login = async (ctx,next)=>{
     }else if(doc.password === password){
         // 生成一个新的token
         let token = createToken(username);
-        console.log(token);
         doc.token = token;
         await AddUser(doc);
         ctx.status = 200;
