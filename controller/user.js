@@ -2,7 +2,7 @@ const userModel = require('../model/user.js');
 // 转换时间格式
 const moment = require('moment');
 // 把objectId转换成时间
-const timestamp = require('objectid-to-timestamp');
+const objectIdToTimestamp = require('objectid-to-timestamp');
 // 加密
 const Hashes = require('jshashes');
 
@@ -23,6 +23,7 @@ const findUser = function(username){
         })
     })
 }
+// 添加用户
 const AddUser = function (data){
     return new Promise((resolve,reject)=>{
         data.save((err)=>{
@@ -33,18 +34,32 @@ const AddUser = function (data){
         })
     })
 }
+
+//找到全部用户信息
+const findAllUsers = function (data){
+    return new Promise((resolve,reject)=>{
+         userModel.find({},(err,doc)=>{
+            if(err){
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
 //登陆接口
 
 const Login = async (ctx,next)=>{
     let username = ctx.request.body.username;
     let password = new Hashes.SHA1().b64(ctx.request.body.password);
     let doc = await findUser(username);
+    console.log(doc)
     if(!doc){
         console.log('检查到用户名不存在');
         ctx.status = 200;
         ctx.body = result.LOGIN.NOEXIST;
         
     }else if(doc.password === password){
+        console.log("asdasd")
         // 生成一个新的token
         let token = createToken(username);
         doc.token = token;
@@ -55,8 +70,12 @@ const Login = async (ctx,next)=>{
             username:username
         }
         ctx.body = result.LOGIN.SUCCESS;
+    }else{
+        ctx.status = 200;
+        ctx.body =  result.LOGIN.FAIL;
     }
 }
+//注册接口
 const Register = async (ctx,next)=>{
     // let username = ctx.request.body.username;
     // let password = new Hashes.SHA1().b64(ctx.request.body.password);
@@ -82,7 +101,16 @@ const Register = async (ctx,next)=>{
     }
 }
 
+//获取全部用户
+const getAllUser = async (ctx,next)=>{
+    let doc = await findAllUsers();
+    ctx.status=200;
+    result.USERINFO.FINDALL.data = doc;
+    ctx.body=result.USERINFO.FINDALL;
+}
+
 module.exports={
     Login,
-    Register
+    Register,
+    getAllUser
 }
