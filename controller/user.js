@@ -76,14 +76,12 @@ const Login = async (ctx,next)=>{
     }
 }
 //注册接口
-const Register = async (ctx,next)=>{
-    // let username = ctx.request.body.username;
-    // let password = new Hashes.SHA1().b64(ctx.request.body.password);
-    
+const Register = async (ctx,next)=>{    
     let user = new userModel({
         username: ctx.request.body.username,
         password: new Hashes.SHA1().b64(ctx.request.body.password), //加密
-        token: createToken(this.username) //创建token并存入数据库
+        token: createToken(this.username), //创建token并存入数据库
+        userType:ctx.request.body.userType || 0
     });
     //将objectid转换为用户创建时间(可以不用)
     user.create_time = moment(objectIdToTimestamp(user._id)).format('YYYY-MM-DD HH:mm:ss');

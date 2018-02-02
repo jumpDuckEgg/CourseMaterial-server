@@ -8,6 +8,10 @@ const UserSchema = new Schema({
          unique:true,
          type: String
      },
+     userType:{
+        type:Number,
+        default:0
+     },
      create_time: Date
 })
 const UserModel = mongoose.model('user',UserSchema)
