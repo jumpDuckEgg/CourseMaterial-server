@@ -4,6 +4,9 @@ const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const config = require('./config/index.js')
 const router = require('koa-router')();
+// 处理文件上传
+const multer = require('koa-multer');
+const upload = multer({dest : './public/upload'});
 // 跨域
 const cors = require('@koa/cors');
 //连接数据库
@@ -12,6 +15,9 @@ const user = require('./routes/user.js');
 const userController = require('./controller/user.js')
 
 app.use(bodyParser());
+
+// 获得七牛云token
+const util = require('./service/util.js'); 
 // 监听请求
 app.use(logger());
 app.use(cors());
@@ -27,6 +33,13 @@ router.post('/login',userController.Login);
 router.post('/register',userController.Register);
 
 router.use('/user',user.routes(),user.allowedMethods());
+
+router.post('/upload',upload.single('courseImage'),function(ctx,next){
+    ctx.body="ok"
+});
+
+router.post('/uploadtoken',util.uploadToken);
+
 //404页面
 router.get('*', async (ctx, next) => {
     ctx.body = { status : 404 }

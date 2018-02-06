@@ -52,7 +52,7 @@ const Login = async (ctx,next)=>{
     let username = ctx.request.body.username;
     let password = new Hashes.SHA1().b64(ctx.request.body.password);
     let doc = await findUser(username);
-    console.log(doc)
+    // console.log(doc)
     if(!doc){
         console.log('检查到用户名不存在');
         ctx.status = 200;
