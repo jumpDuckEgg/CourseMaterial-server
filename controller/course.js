@@ -23,6 +23,17 @@ const findAllCourse = () =>{
     })
 }
 
+const removeCourse = (data)=>{
+    return new Promise((resolve,reject)=>{
+        courseModel.findOneAndRemove(data,(err,res)=>{
+            if(err){
+                reject(err)
+            }
+            resolve(res)
+        })
+    })
+}
+
 const IncreaseCourse = async (ctx, next) => {
     let id = 0;
     await counterController.getNextCounterNum('course').then(res => {
@@ -50,8 +61,16 @@ const getAllCourse = async (ctx,next)=>{
     ctx.body = result.COURSE.FINDALLSUCCESS;
 }
 
+const deleteCourse = async (ctx,next)=>{
+    console.log(ctx.request.body.course_id)
+    let data = { course_id:ctx.request.body.course_id };
+    let doc = await removeCourse(data);
+    result.COURSE.REMOVESUCCESS.data = doc;
+    ctx.body = result.COURSE.REMOVESUCCESS;
+}
 
 module.exports = {
     IncreaseCourse,
-    getAllCourse
+    getAllCourse,
+    deleteCourse
 }

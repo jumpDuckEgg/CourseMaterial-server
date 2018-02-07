@@ -7,4 +7,6 @@ course.post('/createcourse',checkToken,courseController.IncreaseCourse);
 
 course.get('/findallcourse',checkToken,courseController.getAllCourse);
 
+course.post('/deletecourse',courseController.deleteCourse);
+
 module.exports = course;
