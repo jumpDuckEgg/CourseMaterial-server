@@ -38,6 +38,10 @@ const courseSchema = new Schema({
         type:Boolean,
         default:false
     },
+    createdTime:{
+        type:Date,
+        default:new Date()
+    },
     // 课件资源
     Coursewares:{
         type:Array,

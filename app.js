@@ -12,7 +12,9 @@ const cors = require('@koa/cors');
 //连接数据库
 const db = require('./db/index.js');
 const user = require('./routes/user.js');
+const course = require('./routes/course.js');
 const userController = require('./controller/user.js')
+const counterController = require('./controller/counter.js');
 
 app.use(bodyParser());
 
@@ -25,6 +27,9 @@ app.use(require('koa-static')(__dirname + '/public'));
 
 db.connect();
 
+// 初始化计数器
+counterController.init();
+
 router.get('/',(ctx,next)=>{
     ctx.body="Hello world!"
 });
@@ -33,6 +38,8 @@ router.post('/login',userController.Login);
 router.post('/register',userController.Register);
 
 router.use('/user',user.routes(),user.allowedMethods());
+
+router.use('/course',course.routes(),course.allowedMethods());
 
 router.post('/upload',upload.single('courseImage'),function(ctx,next){
     ctx.body="ok"

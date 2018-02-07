@@ -1,11 +1,11 @@
 const config = require('../config/index.js');
 const qiuniu = require('qiniu');
 
-function qiniuToken(suffix) {
+function qiniuToken(data) {
     let options = {
         scope: config.BUCKET,
-        saveKey:"image/logo/$(etag)."+suffix,
-        returnBody: '{"key":"http://p3psczqxy.bkt.clouddn.com/$(key)","hash":"$(etag)","fname":$(fname),"fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+        saveKey:data.type+"/$(etag)."+data.suffix,
+        returnBody: '{"key":"http://qiniu.fangunbayadan.cn/$(key)","hash":"$(etag)","fname":$(fname),"fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
     };
     let mac = new qiuniu.auth.digest.Mac(config.ACCESSKEY,config.SECRETKEY);
     let putPolicy = new qiuniu.rs.PutPolicy(options);   
@@ -14,8 +14,8 @@ function qiniuToken(suffix) {
 }
 
 const uploadToken = async (ctx,next)=>{
-    let suffix = ctx.request.body.suffix;
-    let token  = await qiniuToken(suffix);
+    let data = ctx.request.body;
+    let token  = await qiniuToken(data);
     ctx.body = {
         data:token,
         upload_url:config.UPLOAD_CLIENT
