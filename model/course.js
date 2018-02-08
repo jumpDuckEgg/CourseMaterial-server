@@ -35,8 +35,11 @@ const courseSchema = new Schema({
     },
     // 是否发布
     isPublish:{
-        type:Boolean,
-        default:false
+        type:String,
+        default:'examine'//初始状态为：examine:审核中；pass:审核通过；fail：审核失败
+    },
+    examineMessage:{
+        type:String
     },
     createdTime:{
         type:Date,

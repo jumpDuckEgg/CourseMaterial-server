@@ -59,7 +59,6 @@ const Login = async (ctx,next)=>{
         ctx.body = result.LOGIN.NOEXIST;
         
     }else if(doc.password === password){
-        console.log("asdasd")
         // 生成一个新的token
         let token = createToken(username);
         doc.token = token;
