@@ -13,4 +13,8 @@ course.post('/updateCoursePublish', courseController.examineOneCourse);
 
 course.post('/updateCourseDetail', courseController.updateCourse);
 
+course.post('/findAllCourseByAuthor',courseController.getAllCourseByAuthor);
+
+
+
 module.exports = course;

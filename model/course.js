@@ -38,14 +38,16 @@ const courseSchema = new Schema({
         type:String,
         default:'examine'//初始状态为：examine:审核中；pass:审核通过；fail：审核失败
     },
+    // 审核信息
     examineMessage:{
         type:String
     },
+    // 创建时间
     createdTime:{
         type:Date,
         default:new Date()
     },
-    // 课件资源
+    //  课件资源
     Coursewares:{
         type:Array,
         default:[]

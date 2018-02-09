@@ -12,9 +12,9 @@ const AddCourse = (data) => {
     })
 }
 
-const findAllCourse = () => {
+const findAllCourse = (query, options) => {
     return new Promise((resolve, reject) => {
-        courseModel.find({}, (err, res) => {
+        courseModel.find(query || {}, options || {}, (err, res) => {
             if (err) {
                 reject(err);
             }
@@ -98,10 +98,20 @@ const updateCourse = async (ctx, next) => {
     ctx.body = result.COURSE.UPDATESUCCESS;
 }
 
+const getAllCourseByAuthor = async (ctx, next) => {
+    let params = ctx.request.body.params;
+    let options = ctx.request.body.options || {};
+    let doc = await findAllCourse(params, options);
+    result.COURSE.FINDALLSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body = result.COURSE.FINDALLSUCCESS;
+}
+
 module.exports = {
     IncreaseCourse,
     getAllCourse,
     deleteCourse,
     examineOneCourse,
-    updateCourse
+    updateCourse,
+    getAllCourseByAuthor
 }

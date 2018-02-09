@@ -6,7 +6,7 @@ const config = require('./config/index.js')
 const router = require('koa-router')();
 // 处理文件上传
 const multer = require('koa-multer');
-const upload = multer({dest : './public/upload'});
+const upload = multer({ dest: './public/upload' });
 // 跨域
 const cors = require('@koa/cors');
 //连接数据库
@@ -19,7 +19,7 @@ const counterController = require('./controller/counter.js');
 app.use(bodyParser());
 
 // 获得七牛云token
-const util = require('./service/util.js'); 
+const util = require('./service/util.js');
 // 监听请求
 app.use(logger());
 app.use(cors());
@@ -30,35 +30,35 @@ db.connect();
 // 初始化计数器
 counterController.init();
 
-router.get('/',(ctx,next)=>{
-    ctx.body="Hello world!"
+router.get('/', (ctx, next) => {
+    ctx.body = "Hello world!"
 });
-router.post('/login',userController.Login);
+router.post('/login', userController.Login);
 
-router.post('/register',userController.Register);
+router.post('/register', userController.Register);
 
-router.use('/user',user.routes(),user.allowedMethods());
+router.use('/user', user.routes(), user.allowedMethods());
 
-router.use('/course',course.routes(),course.allowedMethods());
+router.use('/course', course.routes(), course.allowedMethods());
 
-router.post('/upload',upload.single('courseImage'),function(ctx,next){
-    ctx.body="ok"
+router.post('/upload', upload.single('courseImage'), function (ctx, next) {
+    ctx.body = "ok"
 });
 
-router.post('/uploadtoken',util.uploadToken);
+router.post('/uploadtoken', util.uploadToken);
 
 //404页面
 router.get('*', async (ctx, next) => {
-    ctx.body = { status : 404 }
+    ctx.body = { status: 404 }
 });
 
-app.use(router.routes(),router.allowedMethods());
+app.use(router.routes(), router.allowedMethods());
 
 
 // error-handling
 app.on('error', (err, ctx) => {
     console.error('server error', err, ctx);
-    
+
 });
 
 module.exports = app

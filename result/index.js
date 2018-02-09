@@ -12,10 +12,10 @@ const USERINFO = {
 }
 const COURSE = {
     CREATESUCCESS: { code: 7, message: "创建课程成功", data: null },
-    FINDALLSUCCESS: { code: 8, message: '获取全部用户信息成功', data: null },
+    FINDALLSUCCESS: { code: 8, message: '获取全部课程信息成功', data: null },
     REMOVESUCCESS: { code: 9, message: '删除课程成功', data: null },
-    PASSCOURSE: { code: 10, message: '审核通过', data: null },
-    UPDATESUCCESS: { code: 11, message: "更新课程成功", data: null }
+    PASSCOURSE: { code: 10, message: '审核成功', data: null },
+    UPDATESUCCESS: { code: 11, message: "更新课程成功", data: null },
 }
 
 module.exports = {
