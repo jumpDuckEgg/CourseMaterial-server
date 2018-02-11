@@ -13,6 +13,7 @@ const cors = require('@koa/cors');
 const db = require('./db/index.js');
 const user = require('./routes/user.js');
 const course = require('./routes/course.js');
+const courseware = require('./routes/courseware.js');
 const userController = require('./controller/user.js')
 const counterController = require('./controller/counter.js');
 
@@ -40,6 +41,8 @@ router.post('/register', userController.Register);
 router.use('/user', user.routes(), user.allowedMethods());
 
 router.use('/course', course.routes(), course.allowedMethods());
+
+router.use('/courseware', courseware.routes(), courseware.allowedMethods());
 
 router.post('/upload', upload.single('courseImage'), function (ctx, next) {
     ctx.body = "ok"

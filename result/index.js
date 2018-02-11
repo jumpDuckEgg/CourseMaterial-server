@@ -18,9 +18,14 @@ const COURSE = {
     UPDATESUCCESS: { code: 11, message: "更新课程成功", data: null },
 }
 
+const COURSEWARE = {
+    CREATESUCCESS :{code : 12 ,message:"创建课件成功",data:null}
+}
+
 module.exports = {
     LOGIN,
     REGISTER,
     USERINFO,
-    COURSE
+    COURSE,
+    COURSEWARE
 }

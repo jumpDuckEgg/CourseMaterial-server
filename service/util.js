@@ -4,22 +4,22 @@ const qiuniu = require('qiniu');
 function qiniuToken(data) {
     let options = {
         scope: config.BUCKET,
-        saveKey:data.type+"/$(etag)."+data.suffix,
-        returnBody: '{"key":"http://qiniu.fangunbayadan.cn/$(key)","hash":"$(etag)","fname":$(fname),"fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}',
+        saveKey: data.type + "/$(fname)",
+        returnBody: '{"key":"http://qiniu.fangunbayadan.cn/$(key)","hash":"$(etag)","fname":$(fname)}',
         callbackBodyType: 'application/json'
     };
-    let mac = new qiuniu.auth.digest.Mac(config.ACCESSKEY,config.SECRETKEY);
-    let putPolicy = new qiuniu.rs.PutPolicy(options);   
+    let mac = new qiuniu.auth.digest.Mac(config.ACCESSKEY, config.SECRETKEY);
+    let putPolicy = new qiuniu.rs.PutPolicy(options);
     let uploadToken = putPolicy.uploadToken(mac);
     return uploadToken;
 }
 
-const uploadToken = async (ctx,next)=>{
+const uploadToken = async (ctx, next) => {
     let data = ctx.request.body;
-    let token  = await qiniuToken(data);
+    let token = await qiniuToken(data);
     ctx.body = {
-        data:token,
-        upload_url:config.UPLOAD_CLIENT
+        data: token,
+        upload_url: config.UPLOAD_CLIENT
     }
 }
 
