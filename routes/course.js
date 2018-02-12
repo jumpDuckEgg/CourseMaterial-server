@@ -15,6 +15,6 @@ course.post('/updateCourseDetail', courseController.updateCourse);
 
 course.post('/findAllCourseByAuthor',courseController.getAllCourseByAuthor);
 
-
+course.post('/addResources',courseController.addResources);
 
 module.exports = course;

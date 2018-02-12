@@ -18,7 +18,7 @@ const COURSE = {
     UPDATESUCCESS: { code: 11, message: "更新课程成功", data: null },
 }
 
-const COURSEWARE = {
+const MATERIAL = {
     CREATESUCCESS :{code : 12 ,message:"创建课件成功",data:null}
 }
 
@@ -27,5 +27,5 @@ module.exports = {
     REGISTER,
     USERINFO,
     COURSE,
-    COURSEWARE
+    MATERIAL
 }

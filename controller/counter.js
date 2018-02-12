@@ -23,6 +23,50 @@ const init = async () => {
             })
         }
     })
+    await counterModel.findOne({ couterType: 'video' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'video',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("视频计数器初始化成功")
+            })
+        }
+    })
+    await counterModel.findOne({ couterType: 'experiment' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'experiment',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("实验计数器初始化成功")
+            })
+        }
+    })
+    await counterModel.findOne({ couterType: 'homework' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'homework',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("习题作业计数器初始化成功")
+            })
+        }
+    })
+    await counterModel.findOne({ couterType: 'test' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'test',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("模拟试题计数器初始化成功")
+            })
+        }
+    })
 }
 
 const getNextCounterNum = (counterType) => {
