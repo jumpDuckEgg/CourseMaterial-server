@@ -19,7 +19,9 @@ const COURSE = {
 }
 
 const MATERIAL = {
-    CREATESUCCESS :{code : 12 ,message:"创建课件成功",data:null}
+    CREATESUCCESS: { code: 12, message: "创建课件成功", data: null },
+    FINDSUCCESS: { code: 13, message: "查找资源成功", data: null },
+    REMOVESUCCESS: { code: 14, message: '删除资源成功', data: null }
 }
 
 module.exports = {

@@ -6,6 +6,7 @@ const experimentController = require('./experiment.js');
 const homeworkController = require('./homework.js');
 const testController = require('./test.js');
 const result = require('../result/index.js');
+// 操作数据库
 const AddCourse = (data) => {
     return new Promise((resolve, reject) => {
         data.save((err) => {
@@ -27,6 +28,7 @@ const findAllCourse = (query, options) => {
         })
     })
 }
+
 
 const removeCourse = (data) => {
     return new Promise((resolve, reject) => {
@@ -51,7 +53,7 @@ const updateOneCourse = (data) => {
 }
 const insertOneCourseArray = (data) => {
     return new Promise((resolve, reject) => {
-        courseModel.updateMany(data.query, { $push: data.options }, (err, doc) => {
+        courseModel.update(data.query, { $push: data.options }, (err, raw) => {
             if (err) {
                 reject(err)
             }
@@ -60,6 +62,17 @@ const insertOneCourseArray = (data) => {
     })
 }
 
+const removeOneCourseArray = (data) => {
+    return new Promise((resolve, reject) => {
+        courseModel.update(data.query, { $pull: data.options }, (err, raw) => {
+            if (err) {
+                reject(err)
+            }
+            resolve();
+        })
+    })
+}
+// 方法
 const IncreaseCourse = async (ctx, next) => {
     let id = 0;
     await counterController.getNextCounterNum('course').then(res => {
@@ -121,6 +134,8 @@ const getAllCourseByAuthor = async (ctx, next) => {
     ctx.status = 200;
     ctx.body = result.COURSE.FINDALLSUCCESS;
 }
+
+
 
 const addResources = async (ctx, next) => {
     // 课件资源
@@ -264,6 +279,152 @@ const addResources = async (ctx, next) => {
     ctx.body = result.MATERIAL.CREATESUCCESS;
 }
 
+const findResourcesByCourseId = async (ctx, next) => {
+    let query = ctx.request.body.query;
+    let doc = await findAllCourse(query);
+    let resourses = {};
+    if (doc[0].Coursewares.length > 0) {
+        await Promise.all(doc[0].Coursewares.map((value, index) => {
+            return coursewareController.findCoursewareById({ 'courseware_id': value.courseware_id })
+        })).then(result => {
+            resourses['coursewares'] = result;
+        })
+    }
+    if (doc[0].experiments.length > 0) {
+        await Promise.all(doc[0].experiments.map((value, index) => {
+            return experimentController.findExperimentById({ 'experiment_id': value.experiment_id })
+        })).then(result => {
+            resourses['experiments'] = result;
+        })
+    }
+    if (doc[0].videos.length > 0) {
+        await Promise.all(doc[0].videos.map((value, index) => {
+            return videoController.findVideoById({ 'video_id': value.video_id })
+        })).then(result => {
+            resourses['videos'] = result;
+        })
+    }
+    if (doc[0].homeWorks.length > 0) {
+        await Promise.all(doc[0].homeWorks.map((value, index) => {
+            return homeworkController.findHomeworkById({ 'homework_id': value.homework_id })
+        })).then(result => {
+            resourses['homeworks'] = result;
+        })
+    }
+    if (doc[0].tests.length > 0) {
+        await Promise.all(doc[0].tests.map((value, index) => {
+            return testController.findTestById({ 'test_id': value.test_id })
+        })).then(result => {
+            resourses['tests'] = result;
+        })
+    }
+    ctx.status = 200;
+    result.MATERIAL.FINDSUCCESS.data = resourses;
+    ctx.body = result.MATERIAL.FINDSUCCESS;
+}
+
+const removeResourcesByCourseId = async (ctx, next) => {
+    console.log(ctx.request.body)
+    if (ctx.request.body['courseware_id']) {
+        console.log(ctx.request.body['courseware_id']);
+        let data = {
+            query: {
+                course_id: ctx.request.body.course_id
+            },
+            options: {
+                Coursewares: { 'courseware_id': ctx.request.body.courseware_id }
+            }
+        }
+        
+        await removeOneCourseArray(data);
+        let coursewareData = {
+            params: {
+                courseware_id: ctx.request.body.courseware_id
+            }
+        }
+        await coursewareController.removeCourseware(coursewareData);
+    }
+    if (ctx.request.body['experiment_id']) {
+        console.log(ctx.request.body['experiment_id']);
+        let data = {
+            query: {
+                course_id: ctx.request.body.course_id
+            },
+            options: {
+                experiments: { 'experiment_id': ctx.request.body.experiment_id }
+            }
+        }
+        
+        await removeOneCourseArray(data);
+        let experimentData = {
+            params: {
+                experiment_id: ctx.request.body.experiment_id
+            }
+        }
+        await experimentController.removeExperiment(experimentData);
+    }
+    if (ctx.request.body['video_id']) {
+        console.log(ctx.request.body['video_id']);
+        let data = {
+            query: {
+                course_id: ctx.request.body.course_id
+            },
+            options: {
+                videos: { 'video_id': ctx.request.body.video_id }
+            }
+        }
+        
+        await removeOneCourseArray(data);
+        let videoData = {
+            params: {
+                video_id: ctx.request.body.video_id
+            }
+        }
+        await videoController.removeVideo(videoData);
+    }
+    if (ctx.request.body['test_id']) {
+        console.log(ctx.request.body['test_id']);
+        let data = {
+            query: {
+                course_id: ctx.request.body.course_id
+            },
+            options: {
+                tests: { 'test_id': ctx.request.body.test_id }
+            }
+        }
+        
+        await removeOneCourseArray(data);
+        let testData = {
+            params: {
+                test_id: ctx.request.body.test_id
+            }
+        }
+        await testController.removeTest(testData);
+    }
+    if (ctx.request.body['homework_id']) {
+        console.log(ctx.request.body['homework_id']);
+        let data = {
+            query: {
+                course_id: ctx.request.body.course_id
+            },
+            options: {
+                homeWorks: { 'homework_id': ctx.request.body.homework_id }
+            }
+        }
+        
+        await removeOneCourseArray(data);
+        let homeworkData = {
+            params: {
+                homework_id: ctx.request.body.homework_id
+            }
+        }
+        await homeworkController.removeHomework(homeworkData);
+    }
+    ctx.status = 200;
+    ctx.body = result.MATERIAL.REMOVESUCCESS;
+}
+
+
 module.exports = {
     IncreaseCourse,
     getAllCourse,
@@ -272,5 +433,7 @@ module.exports = {
     updateCourse,
     getAllCourseByAuthor,
     updateOneCourse,
-    addResources
+    addResources,
+    findResourcesByCourseId,
+    removeResourcesByCourseId
 }

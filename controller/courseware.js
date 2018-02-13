@@ -21,38 +21,35 @@ const addCoursewares = (data) => {
     })
 }
 
+const findCoursewareById = (data)=>{
+    return new Promise((resolve,reject)=>{
+        coursewareModel.findOne(data,(err,doc)=>{
+            if(err){
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+
+const removeCourseware = (data)=>{
+    return new Promise((resolve,reject)=>{
+        coursewareModel.remove(data.params,(err)=>{
+            if(err){
+                reject()
+            }
+            resolve();
+        })
+    })
+}
+
 const increaseCourseware = async (ctx, next) => {
-    // let data = ctx.request.body;
-    // await Promise.all(data.map(function (elem) {
-    //     return counterController.getNextCounterNum('courseware')
-    // })).then(function (result) {
-    //     data.map((value, index) => {
-    //         value.courseware_id = result[index].couterNum;
-    //     });
-    // }).catch(err => {
-    //     console.log(err)
-    // });
-    // let doc = await addCoursewares(data);
-    // let coursewares = [];
-    // doc.map((value, index) => {
-    //     coursewares.push(value.courseware_id)
-    // })
-    // let courseUpdate = {
-    //     query: {
-    //         course_id: data[0].course_id
-    //     },
-    //     options: {
-    //         Coursewares: coursewares
-    //     }
-    // };
-    // console.log(courseUpdate)
-    // await courseController.updateOneCourse(courseUpdate);
-    // ctx.status = 200;
-    // ctx.body = result.COURSEWARE.CREATESUCCESS;
 
 }
 
 module.exports = {
     increaseCourseware,
-    addCoursewares
+    addCoursewares,
+    findCoursewareById,
+    removeCourseware
 }

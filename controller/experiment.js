@@ -11,6 +11,30 @@ const addExperiments = (data) => {
     })
 }
 
+const findExperimentById = (data)=>{
+    return new Promise((resolve,reject)=>{
+        experimentModel.findOne(data,(err,doc)=>{
+            if(err){
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
+
+const removeExperiment = (data)=>{
+    return new Promise((resolve,reject)=>{
+        experimentModel.remove(data.params,(err)=>{
+            if(err){
+                reject(err)
+            }
+            resolve();
+        })
+    })
+}
+
 module.exports={
-    addExperiments
+    addExperiments,
+    findExperimentById,
+    removeExperiment
 }

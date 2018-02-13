@@ -11,6 +11,30 @@ const addHomeworks = (data) => {
     })
 }
 
+const findHomeworkById = (data)=>{
+    return new Promise((resolve,reject)=>{
+        homeworkModel.findOne(data,(err,doc)=>{
+            if(err){
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
+
+const removeHomework = (data) =>{
+    return new Promise((resolve,reject)=>{
+        homeworkModel.remove(data.params,(err)=>{
+            if(err){
+                reject(err)
+            }
+            resolve();
+        })
+    })
+}
+
 module.exports={
-    addHomeworks
+    addHomeworks,
+    findHomeworkById,
+    removeHomework
 }
