@@ -13,6 +13,8 @@ course.post('/updateCoursePublish',checkToken, courseController.examineOneCourse
 
 course.post('/updateCourseDetail',checkToken, courseController.updateCourse);
 
+course.post('/findAllCourseIspublish',checkToken,courseController.getAllCourseByAuthor);
+
 course.post('/findAllCourseByAuthor',checkToken,courseController.getAllCourseByAuthor);
 
 course.post('/addResources',checkToken,courseController.addResources);
