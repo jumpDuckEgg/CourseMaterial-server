@@ -67,6 +67,17 @@ const init = async () => {
             })
         }
     })
+    await counterModel.findOne({ couterType: 'onlineTest' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'onlineTest',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("在线测试计数器初始化成功")
+            })
+        }
+    })
 }
 
 const getNextCounterNum = (counterType) => {

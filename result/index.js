@@ -24,10 +24,18 @@ const MATERIAL = {
     REMOVESUCCESS: { code: 14, message: '删除资源成功', data: null }
 }
 
+const ONLINETEST = {
+    CREATESUCCESS: { code: 15, message: '创建在线测试成功', data: null },
+    FINDSUCCESS: { code: 16, message: "查找在线测试成功", data: null },
+    MODIFYSUCCESS: { code: 17, message: '修改在线测试成功', data: null },
+    REMOVESUCCESS: { code: 18, message: "删除在线测试成功", data: null }
+}
+
 module.exports = {
     LOGIN,
     REGISTER,
     USERINFO,
     COURSE,
-    MATERIAL
+    MATERIAL,
+    ONLINETEST
 }

@@ -426,6 +426,9 @@ const removeResourcesByCourseId = async (ctx, next) => {
 
 
 module.exports = {
+    findAllCourse,
+    removeOneCourseArray,
+    insertOneCourseArray,
     IncreaseCourse,
     getAllCourse,
     deleteCourse,
