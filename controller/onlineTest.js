@@ -98,7 +98,8 @@ const getOnlineTestById = async (ctx,next)=>{
     let data = {
         onlineTest_id:ctx.request.body.onlineTest_id
     }
-    let doc = findOnlineTestById(data);
+    let doc =await findOnlineTestById(data);
+    console.log(doc)
     result.ONLINETEST.FINDSUCCESS.data = doc;
     ctx.status = 200;
     ctx.body =result.ONLINETEST.FINDSUCCESS;
