@@ -94,6 +94,15 @@ const findAllOnlineTest = async (ctx, next) => {
     ctx.body = result.ONLINETEST.FINDSUCCESS;
 }
 
+const getOnlineTestById = async (ctx,next)=>{
+    let data = {
+        onlineTest_id:ctx.request.body.onlineTest_id
+    }
+    let doc = findOnlineTestById(data);
+    result.ONLINETEST.FINDSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body =result.ONLINETEST.FINDSUCCESS;
+}
 
 const modifyOnlineTest = async (ctx, next) => {
     let data = {
@@ -128,5 +137,6 @@ module.exports = {
     saveOnlineTest,
     findAllOnlineTest,
     modifyOnlineTest,
-    deleteOnlineTest
+    deleteOnlineTest,
+    getOnlineTestById
 }

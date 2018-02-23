@@ -135,7 +135,14 @@ const getAllCourseByAuthor = async (ctx, next) => {
     ctx.body = result.COURSE.FINDALLSUCCESS;
 }
 
-
+const getCourseByParams = async (ctx, next) => {
+    let params = ctx.request.body.params;
+    let options = ctx.request.body.options || {};
+    let doc = await findAllCourse(params, options);
+    result.COURSE.FINDALLSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body = result.COURSE.FINDALLSUCCESS;
+}
 
 const addResources = async (ctx, next) => {
     // 课件资源
@@ -431,6 +438,7 @@ module.exports = {
     insertOneCourseArray,
     IncreaseCourse,
     getAllCourse,
+    getCourseByParams,
     deleteCourse,
     examineOneCourse,
     updateCourse,

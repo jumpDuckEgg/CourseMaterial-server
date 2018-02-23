@@ -19,7 +19,12 @@ const homeworkSchema = new Schema({
     course_id:{
         type:Number,
         required:true
-    }
+    },
+    // 创建时间
+    createdTime:{
+        type:Date,
+        default:new Date()
+    },
 })
 
 const homeworkModel = mongoose.model('homework',homeworkSchema);

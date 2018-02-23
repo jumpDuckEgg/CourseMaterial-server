@@ -17,6 +17,8 @@ course.post('/findAllCourseIspublish',checkToken,courseController.getAllCourseBy
 
 course.post('/findAllCourseByAuthor',checkToken,courseController.getAllCourseByAuthor);
 
+course.post('/findCourseByParams',checkToken,courseController.getCourseByParams);
+
 course.post('/addResources',checkToken,courseController.addResources);
 
 course.post('/findallresource',checkToken,courseController.findResourcesByCourseId);

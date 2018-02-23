@@ -12,4 +12,6 @@ onlineTest.post('/publishOnlineTest',onlineTestController.modifyOnlineTest);
 
 onlineTest.post('/removeOnlineTest',onlineTestController.deleteOnlineTest);
 
+onlineTest.post('/getOnlineTestById',onlineTestController.getOnlineTestById);
+
 module.exports = onlineTest;
