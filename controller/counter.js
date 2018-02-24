@@ -1,6 +1,17 @@
 const counterModel = require('../model/counter.js');
 
 const init = async () => {
+    await counterModel.findOne({ couterType: 'user' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'user',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("用户计数器初始化成功")
+            })
+        }
+    })
     await counterModel.findOne({ couterType: 'course' }, (err, res) => {
         if (!res) {
             let courseEntity = new counterModel({

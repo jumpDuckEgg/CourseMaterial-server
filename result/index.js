@@ -31,11 +31,16 @@ const ONLINETEST = {
     REMOVESUCCESS: { code: 18, message: "删除在线测试成功", data: null }
 }
 
+const VIDEO = {
+    FINDSUCCESS: { code: 19, message: "查找视频成功", data: null }
+}
+
 module.exports = {
     LOGIN,
     REGISTER,
     USERINFO,
     COURSE,
     MATERIAL,
-    ONLINETEST
+    ONLINETEST,
+    VIDEO
 }

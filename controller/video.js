@@ -1,4 +1,7 @@
 const videoModel = require('../model/video.js');
+const result = require('../result/index.js');
+
+
 const addVideos = (data) => {
     return new Promise((resolve, reject) => {
         videoModel.insertMany(data, (err, doc) => {
@@ -32,8 +35,20 @@ const removeVideo = (data) => {
     })
 }
 
+
+const getVideoById = async (ctx,next)=>{
+    let data = {
+        video_id:ctx.request.body.video_id
+    }
+    let doc = await findVideoById(data);
+    ctx.status = 200;
+    result.VIDEO.FINDSUCCESS.data = doc;
+    ctx.body = result.VIDEO.FINDSUCCESS;
+}
+
 module.exports={
     addVideos,
     findVideoById,
-    removeVideo
+    removeVideo,
+    getVideoById
 }
