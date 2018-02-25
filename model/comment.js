@@ -26,6 +26,11 @@ const commentSchema = new Schema({
         type:String,
         required:true
     },
+    // 评论人图片
+    people_image:{
+        type:String,
+        required:true
+    },
      // 创建时间
      createdTime:{
         type:Date,

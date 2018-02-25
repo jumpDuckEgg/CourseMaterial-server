@@ -35,6 +35,12 @@ const VIDEO = {
     FINDSUCCESS: { code: 19, message: "查找视频成功", data: null }
 }
 
+const COMMENT = {
+    CREATESUCCESS: { code: 20, message: '添加评论成功', data: null },
+    FINDALLSUCCESS: { code: 21, message: '查找评论成功', data: null },
+    MODIFYSUCCESS: { code: 22, message: "修改评论成功", data: null }
+}
+
 module.exports = {
     LOGIN,
     REGISTER,
@@ -42,5 +48,6 @@ module.exports = {
     COURSE,
     MATERIAL,
     ONLINETEST,
-    VIDEO
+    VIDEO,
+    COMMENT
 }

@@ -36,6 +36,18 @@ const AddUser = function (data) {
     })
 }
 
+const insertUserComment = (data)=>{
+    return new Promise((resolve,reject)=>{
+        console.log(data)
+        userModel.update(data.query,{ $push: data.options },(err,raw)=>{
+            if(err){
+                reject();
+            }
+            resolve();
+        })
+    })
+}
+
 //找到全部用户信息
 const findAllUsers = function (data) {
     return new Promise((resolve, reject) => {
@@ -116,8 +128,15 @@ const getAllUser = async (ctx, next) => {
     ctx.body = result.USERINFO.FINDALL;
 }
 
+// 修改用户信息
+const modifyUserComment = async (ctx,next)=>{
+    
+
+}
+
 module.exports = {
     Login,
     Register,
-    getAllUser
+    getAllUser,
+    insertUserComment
 }

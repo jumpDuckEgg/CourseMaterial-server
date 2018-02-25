@@ -89,6 +89,17 @@ const init = async () => {
             })
         }
     })
+    await counterModel.findOne({ couterType: 'comment' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'comment',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("评论计数器初始化成功")
+            })
+        }
+    })
 }
 
 const getNextCounterNum = (counterType) => {

@@ -16,6 +16,7 @@ const course = require('./routes/course.js');
 const courseware = require('./routes/courseware.js');
 const onlineTest = require('./routes/onlineTest.js');
 const video = require('./routes/video.js');
+const comment = require('./routes/comment.js');
 const userController = require('./controller/user.js')
 const counterController = require('./controller/counter.js');
 
@@ -49,6 +50,8 @@ router.use('/courseware', courseware.routes(), courseware.allowedMethods());
 router.use('/onlineTest', onlineTest.routes(), onlineTest.allowedMethods());
 
 router.use('/video',video.routes(),video.allowedMethods());
+
+router.use('/comment',comment.routes(),comment.allowedMethods());
 
 // router.post('/upload', upload.single('courseImage'), function (ctx, next) {
 //     ctx.body = "ok"
