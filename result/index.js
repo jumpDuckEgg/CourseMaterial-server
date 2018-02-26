@@ -8,7 +8,9 @@ const REGISTER = {
     EXIST: { code: 5, message: '用户已存在', data: null },
 }
 const USERINFO = {
-    FINDALL: { code: 6, message: '获取全部用户信息成功', data: null }
+    FINDALL: { code: 6, message: '获取全部用户信息成功', data: null },
+    FINDSUCCESS: { code: 6, message: '获取用户信息成功', data: null },
+    UPDATESUCCESS: { code: 6, message: '修改用户信息成功', data: null },
 }
 const COURSE = {
     CREATESUCCESS: { code: 7, message: "创建课程成功", data: null },
@@ -38,7 +40,8 @@ const VIDEO = {
 const COMMENT = {
     CREATESUCCESS: { code: 20, message: '添加评论成功', data: null },
     FINDALLSUCCESS: { code: 21, message: '查找评论成功', data: null },
-    MODIFYSUCCESS: { code: 22, message: "修改评论成功", data: null }
+    MODIFYSUCCESS: { code: 22, message: "修改评论成功", data: null },
+    DELETESUCCESS: { code: 23, message: '删除成功', data: null }
 }
 
 module.exports = {

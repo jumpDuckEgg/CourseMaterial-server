@@ -6,4 +6,10 @@ comment.post('/addComment',commentController.increaseComment);
 
 comment.post('/findAllComment',commentController.getCommentByType);
 
+comment.get('/getAllComment',commentController.getAllComment);
+
+comment.post('/modifyCommentPublish',commentController.modifyCommentPublish);
+
+comment.post('/deleteComment',commentController.deleteComment);
+
 module.exports = comment;

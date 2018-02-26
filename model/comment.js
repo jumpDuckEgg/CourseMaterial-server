@@ -6,7 +6,7 @@ const commentSchema = new Schema({
     comment_id:{
         type:Number
     },
-    // 评论内容
+    // 评论内容 
     comment_content:{
         type:String,
         required:true
@@ -21,10 +21,19 @@ const commentSchema = new Schema({
         type:Number,
         required:true
     },
+    // 评论上下线
+    isPublish:{
+        type:Boolean,
+        default:true
+    },
     // 评论人
     comment_people:{
         type:String,
         required:true
+    },
+    // 评论人ID
+    people_id:{
+        type:Number,
     },
     // 评论人图片
     people_image:{

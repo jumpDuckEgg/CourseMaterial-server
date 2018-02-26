@@ -18,7 +18,7 @@ const onlineTestSchema = new Schema({
     // 在线测试发布
     onlineTest_publish:{
         type:Boolean,
-        default:false,
+        default:true,
     },
     // 课程ID
     course_id:{

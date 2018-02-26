@@ -25,7 +25,38 @@ const findAllComment = (data) => {
     })
 }
 
+const updateComment = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.updateOne(data.query, data.options, (err, raw) => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        })
+    })
+}
 
+const updateComments = (data)=>{
+    return new Promise((resolve,reject)=>{
+        commentModel.updateMany(data.query,data.update,(err,raw)=>{
+            if(err){
+                reject(err)
+            }
+            resolve();
+        })
+    })
+}
+
+const removeComment = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.remove(data, (err) => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        })
+    })
+}
 
 
 const increaseComment = async (ctx, next) => {
@@ -40,10 +71,11 @@ const increaseComment = async (ctx, next) => {
         comment_type: ctx.request.body.comment_type,
         type_id: ctx.request.body.type_id,
         comment_people: ctx.request.body.comment_people,
-        people_image: ctx.request.body.people_image
+        people_image: ctx.request.body.people_image,
+        people_id:Number(ctx.request.body.user_id)
     });
 
-    await addComment(comment);
+    await addComment(comment);  
 
 
     let data = {
@@ -74,10 +106,55 @@ const getCommentByType = async (ctx, next) => {
     ctx.body = result.COMMENT.FINDALLSUCCESS;
 }
 
+const getAllComment = async (ctx, next) => {
+    let data = {
+        query: {}
+    };
+    let docs = await findAllComment(data);
+    result.COMMENT.FINDALLSUCCESS.data = docs;
+    ctx.status = 200;
+    ctx.body = result.COMMENT.FINDALLSUCCESS;
+}
+
+const modifyCommentPublish = async (ctx, next) => {
+    let data = {
+        query: {
+            comment_id: ctx.request.body.comment_id
+        },
+        options: {
+            isPublish: ctx.request.body.isPublish
+        }
+    }
+    await updateComment(data);
+    ctx.status = 200;
+    ctx.body = result.COMMENT.MODIFYSUCCESS;
+}
 
 
+const deleteComment = async (ctx, next) => {
+    let data = {
+        comment_id: ctx.request.body.comment_id
+    }
+    await removeComment(data);
+    let updateData = {
+        query: {
+            user_id: Number(ctx.request.body.user_id)
+        },
+        options: {
+            comments: { comment_id: ctx.request.body.comment_id }
+        }
+    }
+
+    await userController.removeUserComment(updateData);
+    ctx.status = 200;
+    ctx.body = result.COMMENT.DELETESUCCESS;
+}
 
 module.exports = {
     increaseComment,
-    getCommentByType
+    getCommentByType,
+    getAllComment,
+    modifyCommentPublish,
+    deleteComment,
+    updateComments
 }

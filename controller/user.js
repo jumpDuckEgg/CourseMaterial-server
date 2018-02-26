@@ -1,5 +1,6 @@
 const userModel = require('../model/user.js');
 const counterController = require('./counter.js');
+const commentController = require('./comment.js');
 // 转换时间格式
 const moment = require('moment');
 // 把objectId转换成时间
@@ -24,6 +25,31 @@ const findUser = function (username) {
         })
     })
 }
+// 查找用户ByID
+const findUserById = function (data) {
+    return new Promise((resolve, reject) => {
+        userModel.findOne(data, { token: 0, password: 0 }, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+
+// 更新用户信息
+const upadateUser = function (data) {
+    return new Promise((resolve, reject) => {
+        userModel.findOneAndUpdate(data.query, data.update, { token: 0, password: 0 }, (err, doc) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
+
+
 // 添加用户
 const AddUser = function (data) {
     return new Promise((resolve, reject) => {
@@ -36,17 +62,31 @@ const AddUser = function (data) {
     })
 }
 
-const insertUserComment = (data)=>{
-    return new Promise((resolve,reject)=>{
+const insertUserComment = (data) => {
+    return new Promise((resolve, reject) => {
         console.log(data)
-        userModel.update(data.query,{ $push: data.options },(err,raw)=>{
-            if(err){
+        userModel.update(data.query, { $push: data.options }, (err, raw) => {
+            if (err) {
                 reject();
             }
             resolve();
         })
     })
 }
+
+
+const removeUserComment = (data) => {
+    return new Promise((resolve, reject) => {
+        console.log(data)
+        userModel.update(data.query, { $pull: data.options }, (err, raw) => {
+            if (err) {
+                reject();
+            }
+            resolve();
+        })
+    })
+}
+
 
 //找到全部用户信息
 const findAllUsers = function (data) {
@@ -128,9 +168,48 @@ const getAllUser = async (ctx, next) => {
     ctx.body = result.USERINFO.FINDALL;
 }
 
+// 获取用户信息
+const getUserInformation = async (ctx, next) => {
+    let data = {
+        user_id: Number(ctx.request.body.user_id)
+    }
+    let doc = await findUserById(data);
+    result.USERINFO.FINDSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body = result.USERINFO.FINDSUCCESS
+}
+
 // 修改用户信息
-const modifyUserComment = async (ctx,next)=>{
-    
+const modifyUserInformation = async (ctx, next) => {
+    let data = {
+        query: ctx.request.body.query,
+        update: ctx.request.body.update
+    }
+    let doc = await upadateUser(data);
+    result.USERINFO.UPDATESUCCESS.data = {
+        token: doc.token,
+        username: doc.username,
+        userType: doc.userType,
+        userImage: doc.userImage,
+        user_id: doc.user_id,
+        comments: doc.comments,
+        create_time: doc.create_time
+    }
+    if (ctx.request.body.update.userImage) {
+        let data = {
+            query: {
+                people_id: doc.user_id
+            },
+            update: {
+                people_image: ctx.request.body.update.userImage
+            }
+        }
+        await commentController.updateComments(data);
+    }
+
+
+    ctx.status = 200;
+    ctx.body = result.USERINFO.UPDATESUCCESS;
 
 }
 
@@ -138,5 +217,8 @@ module.exports = {
     Login,
     Register,
     getAllUser,
-    insertUserComment
+    insertUserComment,
+    removeUserComment,
+    getUserInformation,
+    modifyUserInformation
 }
