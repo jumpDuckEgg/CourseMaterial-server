@@ -31,6 +31,11 @@ const UserSchema = new Schema({
     comments:{
         type:Array,
         default:[]
+    },
+    // 收藏课程
+    collections:{
+        type:Array,
+        default:[]
     }
 })
 const UserModel = mongoose.model('user',UserSchema)

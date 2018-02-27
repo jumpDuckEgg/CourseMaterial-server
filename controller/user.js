@@ -1,6 +1,6 @@
 const userModel = require('../model/user.js');
 const counterController = require('./counter.js');
-const commentController = require('./comment.js');
+const commentModel = require('../model/comment.js');
 // 转换时间格式
 const moment = require('moment');
 // 把objectId转换成时间
@@ -13,6 +13,21 @@ const result = require('../result/index.js');
 
 //生成token
 const createToken = require('../token/createToken.js');
+
+
+// 特殊添加的修改评论
+const updateComments = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.updateMany(data.query, data.update, (err, raw) => {
+            if (err) {
+                reject(err)
+            }
+            resolve();
+        })
+    })
+}
+
+
 
 // 查找用户
 const findUser = function (username) {
@@ -62,7 +77,9 @@ const AddUser = function (data) {
     })
 }
 
-const insertUserComment = (data) => {
+
+// 修改用户数组属性：插入
+const insertUserComment = function (data) {
     return new Promise((resolve, reject) => {
         console.log(data)
         userModel.update(data.query, { $push: data.options }, (err, raw) => {
@@ -74,8 +91,8 @@ const insertUserComment = (data) => {
     })
 }
 
-
-const removeUserComment = (data) => {
+// 修改用户数组属性：删除
+const removeUserComment = function (data) {
     return new Promise((resolve, reject) => {
         console.log(data)
         userModel.update(data.query, { $pull: data.options }, (err, raw) => {
@@ -204,13 +221,40 @@ const modifyUserInformation = async (ctx, next) => {
                 people_image: ctx.request.body.update.userImage
             }
         }
-        await commentController.updateComments(data);
+        await updateComments(data);
     }
-
-
     ctx.status = 200;
     ctx.body = result.USERINFO.UPDATESUCCESS;
 
+}
+
+const favoriteCourse = async (ctx, next) => {
+    let data = {
+        query: {
+            user_id: ctx.request.body.user_id
+        },
+        options: {
+            collections: { course_id: ctx.request.body.course_id, type: ctx.request.body.type }
+        }
+    };
+
+    await insertUserComment(data);
+    ctx.status = 200;
+    ctx.body = result.USERINFO.UPDATESUCCESS;
+}
+const unfavoriteCourse = async (ctx, next) => {
+    let data = {
+        query: {
+            user_id: ctx.request.body.user_id
+        },
+        options: {
+            collections: { course_id: ctx.request.body.course_id, type: ctx.request.body.type }
+        }
+    };
+
+    await removeUserComment(data);
+    ctx.status = 200;
+    ctx.body = result.USERINFO.UPDATESUCCESS;
 }
 
 module.exports = {
@@ -220,5 +264,7 @@ module.exports = {
     insertUserComment,
     removeUserComment,
     getUserInformation,
-    modifyUserInformation
+    modifyUserInformation,
+    favoriteCourse,
+    unfavoriteCourse
 }

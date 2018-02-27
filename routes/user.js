@@ -8,5 +8,10 @@ user.get('/information', (ctx, next) => {
 });
 user.post('/getUserInformation', userController.getUserInformation);
 
-user.post('/updateUserInformation',userController.modifyUserInformation)
+user.post('/updateUserInformation', userController.modifyUserInformation);
+
+user.post('/favoriteCourse', userController.favoriteCourse);
+
+user.post('/unfavoriteCourse', userController.unfavoriteCourse);
+
 module.exports = user;

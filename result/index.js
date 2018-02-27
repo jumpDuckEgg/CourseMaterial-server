@@ -44,6 +44,19 @@ const COMMENT = {
     DELETESUCCESS: { code: 23, message: '删除成功', data: null }
 }
 
+
+const EXPERIMENT = {
+    FINDSUCCESS: { code: 24, message: "查找实验资源成功", data: null }
+}
+
+const HOMEWORK = {
+    FINDSUCCESS: { code: 25, message: "查找习题作业成功", data: null }
+}
+
+const TEST = {
+    FINDSUCCESS: { code: 26, message: "查找模拟试题成功", data: null }
+}
+
 module.exports = {
     LOGIN,
     REGISTER,
@@ -52,5 +65,8 @@ module.exports = {
     MATERIAL,
     ONLINETEST,
     VIDEO,
-    COMMENT
+    COMMENT,
+    EXPERIMENT,
+    HOMEWORK,
+    TEST
 }
