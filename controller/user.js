@@ -52,6 +52,17 @@ const findUserById = function (data) {
     })
 }
 
+const findUserByOptions = function (data) {
+    return new Promise((resolve, reject) => {
+        userModel.findOne(data.query, data.options, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc)
+        })
+    })
+}
+
 // 更新用户信息
 const upadateUser = function (data) {
     return new Promise((resolve, reject) => {
@@ -94,7 +105,6 @@ const insertUserComment = function (data) {
 // 修改用户数组属性：删除
 const removeUserComment = function (data) {
     return new Promise((resolve, reject) => {
-        console.log(data)
         userModel.update(data.query, { $pull: data.options }, (err, raw) => {
             if (err) {
                 reject();
@@ -234,13 +244,25 @@ const favoriteCourse = async (ctx, next) => {
             user_id: ctx.request.body.user_id
         },
         options: {
-            collections: { course_id: ctx.request.body.course_id, type: ctx.request.body.type }
+            collections: { course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage }
         }
     };
+    let findData = {
+        query: {
+            collections: [{ course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage }]
+        }
+    }
+    let doc = await findUserByOptions(findData);
 
-    await insertUserComment(data);
-    ctx.status = 200;
-    ctx.body = result.USERINFO.UPDATESUCCESS;
+    if (doc) {
+        ctx.status = 200;
+        ctx.body = result.USERINFO.COLLECTEXIST;
+    } else {
+        await insertUserComment(data);
+        ctx.status = 200;
+        ctx.body = result.USERINFO.UPDATESUCCESS;
+    }
+
 }
 const unfavoriteCourse = async (ctx, next) => {
     let data = {
@@ -248,7 +270,7 @@ const unfavoriteCourse = async (ctx, next) => {
             user_id: ctx.request.body.user_id
         },
         options: {
-            collections: { course_id: ctx.request.body.course_id, type: ctx.request.body.type }
+            collections: { course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage }
         }
     };
 
