@@ -81,6 +81,11 @@ const courseSchema = new Schema({
     evaluation:{
         type:Array,
         default:[]
+    },
+    // 收藏次数
+    collectNum:{
+        type:Number,
+        default:0
     }
 });
 

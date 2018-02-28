@@ -39,9 +39,9 @@ const VIDEO = {
 }
 
 const COMMENT = {
-    CREATESUCCESS: { code: 20, message: '添加评论成功', data: null },
-    FINDALLSUCCESS: { code: 21, message: '查找评论成功', data: null },
-    MODIFYSUCCESS: { code: 22, message: "修改评论成功", data: null },
+    CREATESUCCESS: { code: 20, message: '添加评价成功', data: null },
+    FINDALLSUCCESS: { code: 21, message: '查找评价成功', data: null },
+    MODIFYSUCCESS: { code: 22, message: "修改评价成功", data: null },
     DELETESUCCESS: { code: 23, message: '删除成功', data: null }
 }
 

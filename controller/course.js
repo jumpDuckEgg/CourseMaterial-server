@@ -29,6 +29,17 @@ const findAllCourse = (query, options) => {
     })
 }
 
+const findOneCourse = (data) => {
+    return new Promise((resolve,reject)=>{
+        courseModel.findOne(data,(err,doc)=>{
+            if(err){
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+
 
 const removeCourse = (data) => {
     return new Promise((resolve, reject) => {
@@ -342,7 +353,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
                 Coursewares: { 'courseware_id': ctx.request.body.courseware_id }
             }
         }
-        
+
         await removeOneCourseArray(data);
         let coursewareData = {
             params: {
@@ -361,7 +372,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
                 experiments: { 'experiment_id': ctx.request.body.experiment_id }
             }
         }
-        
+
         await removeOneCourseArray(data);
         let experimentData = {
             params: {
@@ -380,7 +391,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
                 videos: { 'video_id': ctx.request.body.video_id }
             }
         }
-        
+
         await removeOneCourseArray(data);
         let videoData = {
             params: {
@@ -399,7 +410,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
                 tests: { 'test_id': ctx.request.body.test_id }
             }
         }
-        
+
         await removeOneCourseArray(data);
         let testData = {
             params: {
@@ -418,7 +429,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
                 homeWorks: { 'homework_id': ctx.request.body.homework_id }
             }
         }
-        
+
         await removeOneCourseArray(data);
         let homeworkData = {
             params: {
@@ -446,5 +457,7 @@ module.exports = {
     updateOneCourse,
     addResources,
     findResourcesByCourseId,
-    removeResourcesByCourseId
+    removeResourcesByCourseId,
+    updateOneCourse,
+    findOneCourse
 }

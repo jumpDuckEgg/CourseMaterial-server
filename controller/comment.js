@@ -36,10 +36,10 @@ const updateComment = (data) => {
     })
 }
 
-const updateComments = (data)=>{
-    return new Promise((resolve,reject)=>{
-        commentModel.updateMany(data.query,data.update,(err,raw)=>{
-            if(err){
+const updateComments = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.updateMany(data.query, data.update, (err, raw) => {
+            if (err) {
                 reject(err)
             }
             resolve();
@@ -72,10 +72,10 @@ const increaseComment = async (ctx, next) => {
         type_id: ctx.request.body.type_id,
         comment_people: ctx.request.body.comment_people,
         people_image: ctx.request.body.people_image,
-        people_id:Number(ctx.request.body.user_id)
+        people_id: Number(ctx.request.body.user_id)
     });
 
-    await addComment(comment);  
+    await addComment(comment);
 
 
     let data = {
@@ -109,6 +109,19 @@ const getCommentByType = async (ctx, next) => {
 const getAllComment = async (ctx, next) => {
     let data = {
         query: {}
+    };
+    let docs = await findAllComment(data);
+    result.COMMENT.FINDALLSUCCESS.data = docs;
+    ctx.status = 200;
+    ctx.body = result.COMMENT.FINDALLSUCCESS;
+}
+
+const getAllCommentById = async (ctx, next) => {
+    let data = {
+        query: {
+            comment_people: ctx.request.body.comment_people,
+            people_id: ctx.request.body.people_id
+        }
     };
     let docs = await findAllComment(data);
     result.COMMENT.FINDALLSUCCESS.data = docs;
@@ -154,6 +167,7 @@ module.exports = {
     increaseComment,
     getCommentByType,
     getAllComment,
+    getAllCommentById,
     modifyCommentPublish,
     deleteComment,
     updateComments

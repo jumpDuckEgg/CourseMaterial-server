@@ -1,6 +1,7 @@
 const userModel = require('../model/user.js');
 const counterController = require('./counter.js');
 const commentModel = require('../model/comment.js');
+const courseController = require('./course.js');
 // 转换时间格式
 const moment = require('moment');
 // 把objectId转换成时间
@@ -237,7 +238,7 @@ const modifyUserInformation = async (ctx, next) => {
     ctx.body = result.USERINFO.UPDATESUCCESS;
 
 }
-
+// 收藏课程
 const favoriteCourse = async (ctx, next) => {
     let data = {
         query: {
@@ -249,7 +250,7 @@ const favoriteCourse = async (ctx, next) => {
     };
     let findData = {
         query: {
-            collections: [{ course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage }]
+            collections: { $elemMatch: { course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage } }
         }
     }
     let doc = await findUserByOptions(findData);
@@ -259,11 +260,20 @@ const favoriteCourse = async (ctx, next) => {
         ctx.body = result.USERINFO.COLLECTEXIST;
     } else {
         await insertUserComment(data);
+        let num = ctx.request.body.collectNum;
+        num++;
+        let courseUpdate = {
+            query: { course_id: ctx.request.body.course_id },
+            options: { collectNum: num }
+        }
+        await courseController.updateOneCourse(courseUpdate);
         ctx.status = 200;
         ctx.body = result.USERINFO.UPDATESUCCESS;
     }
 
 }
+
+// 取消收藏
 const unfavoriteCourse = async (ctx, next) => {
     let data = {
         query: {
@@ -273,7 +283,17 @@ const unfavoriteCourse = async (ctx, next) => {
             collections: { course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage }
         }
     };
-
+    let courseData = {
+        course_id: ctx.request.body.course_id
+    }
+    let doc = await courseController.findOneCourse(courseData);
+    let num = doc.collectNum;
+    num--;
+    let courseUpdate = {
+        query: { course_id: ctx.request.body.course_id },
+        options: { collectNum: num }
+    }
+    await courseController.updateOneCourse(courseUpdate);
     await removeUserComment(data);
     ctx.status = 200;
     ctx.body = result.USERINFO.UPDATESUCCESS;
