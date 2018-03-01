@@ -17,7 +17,7 @@ const AddCourse = (data) => {
         })
     })
 }
-
+// 查找所有课程
 const findAllCourse = (query, options) => {
     return new Promise((resolve, reject) => {
         courseModel.find(query || {}, options || {}, (err, res) => {
@@ -28,19 +28,33 @@ const findAllCourse = (query, options) => {
         })
     })
 }
-
+// 查找一个课程
 const findOneCourse = (data) => {
-    return new Promise((resolve,reject)=>{
-        courseModel.findOne(data,(err,doc)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        courseModel.findOne(data, (err, doc) => {
+            if (err) {
                 reject(err);
             }
             resolve(doc);
         })
     })
 }
+// 特殊获取全部课程
+const findCourseLimit = (data) => {
+    return new Promise((resolve, reject) => {
+        courseModel.find(data.query).sort(data.sort).limit(data.limitNum).exec((err, res) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(res)
+        })
+    })
+}
 
 
+
+
+// 删除课程
 const removeCourse = (data) => {
     return new Promise((resolve, reject) => {
         courseModel.findOneAndRemove(data, (err, res) => {
@@ -51,7 +65,7 @@ const removeCourse = (data) => {
         })
     })
 }
-
+// 更新一个课程
 const updateOneCourse = (data) => {
     return new Promise((resolve, reject) => {
         courseModel.findOneAndUpdate(data.query, data.options, (err, doc) => {
@@ -62,6 +76,7 @@ const updateOneCourse = (data) => {
         })
     })
 }
+// 更新课程属性数组元素
 const insertOneCourseArray = (data) => {
     return new Promise((resolve, reject) => {
         courseModel.update(data.query, { $push: data.options }, (err, raw) => {
@@ -72,7 +87,7 @@ const insertOneCourseArray = (data) => {
         })
     })
 }
-
+// 移除课程数组元素
 const removeOneCourseArray = (data) => {
     return new Promise((resolve, reject) => {
         courseModel.update(data.query, { $pull: data.options }, (err, raw) => {
@@ -83,6 +98,18 @@ const removeOneCourseArray = (data) => {
         })
     })
 }
+// 获取课程个数
+const getCourseCount = (data) => {
+    return new Promise((resolve, reject) => {
+        courseModel.count(data, (err, count) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(count);
+        })
+    })
+}
+
 // 方法
 const IncreaseCourse = async (ctx, next) => {
     let id = 0;
@@ -150,6 +177,22 @@ const getCourseByParams = async (ctx, next) => {
     let params = ctx.request.body.params;
     let options = ctx.request.body.options || {};
     let doc = await findAllCourse(params, options);
+    result.COURSE.FINDALLSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body = result.COURSE.FINDALLSUCCESS;
+}
+
+const getCourseLimit = async (ctx, next) => {
+    let data = {
+        query: {
+            author: ctx.request.body.author
+        },
+        sort: {
+            collectNum: -1
+        },
+        limitNum: 5
+    }
+    let doc = await findCourseLimit(data);
     result.COURSE.FINDALLSUCCESS.data = doc;
     ctx.status = 200;
     ctx.body = result.COURSE.FINDALLSUCCESS;
@@ -443,6 +486,8 @@ const removeResourcesByCourseId = async (ctx, next) => {
 }
 
 
+
+
 module.exports = {
     findAllCourse,
     removeOneCourseArray,
@@ -459,5 +504,7 @@ module.exports = {
     findResourcesByCourseId,
     removeResourcesByCourseId,
     updateOneCourse,
-    findOneCourse
+    findOneCourse,
+    getCourseCount,
+    getCourseLimit
 }

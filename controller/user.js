@@ -28,7 +28,16 @@ const updateComments = (data) => {
     })
 }
 
-
+const getCommentCount = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.count(data, (err, count) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(count)
+        })
+    })
+}
 
 // 查找用户
 const findUser = function (username) {
@@ -52,6 +61,21 @@ const findUserById = function (data) {
         })
     })
 }
+
+// 删除用户
+const removeUser = (data) => {
+    return new Promise((resolve, reject) => {
+        userModel.remove(data, err => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        })
+    })
+}
+
+
+
 
 const findUserByOptions = function (data) {
     return new Promise((resolve, reject) => {
@@ -299,6 +323,127 @@ const unfavoriteCourse = async (ctx, next) => {
     ctx.body = result.USERINFO.UPDATESUCCESS;
 }
 
+
+// 获取用户数据
+const getUserCountNum = async (ctx, next) => {
+    let data = {
+        author: ctx.request.body.username
+    }
+
+    let courseNum = 0;
+    courseNum = await courseController.getCourseCount(data);
+    let docs = await courseController.findAllCourse(data);
+    let materialNum = 0;
+    let onlineTestNum = 0;
+    let commentNum = 0;
+    if (docs.length != 0) {
+        for (let i = 0; i < docs.length; i++) {
+            materialNum += docs[i].Coursewares.length + docs[i].experiments.length + docs[i].videos.length + docs[i].videos.length + docs[i].homeWorks.length + docs[i].tests.length;
+            onlineTestNum += docs[i].onlineTests.length;
+            let courseCommnetData = {
+                comment_type: "course",
+                type_id: docs[i].course_id
+            }
+            let courseCommentNum = await getCommentCount(courseCommnetData);
+            commentNum += Number(courseCommentNum);
+            if (docs[i].experiments.length != 0) {
+                await Promise.all(docs[i].experiments.map(function (elem) {
+                    let commentData = {
+                        comment_type: "experiment",
+                        type_id: elem.experiment_id
+                    }
+                    return getCommentCount(commentData)
+                })).then(function (result) {
+                    result.map((value, index) => {
+                        commentNum += Number(value)
+                    });
+                }).catch(err => {
+                    console.log(err)
+                });
+
+            }
+            if (docs[i].videos.length != 0) {
+                await Promise.all(docs[i].videos.map(function (elem) {
+
+                    let commentData = {
+                        comment_type: "videos",
+                        type_id: elem.video_id
+                    }
+                    return getCommentCount(commentData)
+                })).then(function (result) {
+                    result.map((value, index) => {
+                        commentNum += Number(value)
+                    });
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+            if (docs[i].homeWorks.length != 0) {
+                await Promise.all(docs[i].homeWorks.map(function (elem) {
+
+                    let commentData = {
+                        comment_type: "homework",
+                        type_id: elem.homework_id
+                    }
+                    return getCommentCount(commentData)
+                })).then(function (result) {
+                    result.map((value, index) => {
+                        commentNum += Number(value)
+                    });
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+            if (docs[i].tests.length != 0) {
+                await Promise.all(docs[i].tests.map(function (elem) {
+
+                    let commentData = {
+                        comment_type: "test",
+                        type_id: elem.test_id
+                    }
+                    return getCommentCount(commentData)
+                })).then(function (result) {
+                    result.map((value, index) => {
+                        commentNum += Number(value)
+                    });
+                }).catch(err => {
+                    console.log(err)
+                });
+            }
+        }
+    }
+
+    ctx.status = 200;
+
+    result.USERINFO.FINDCOUNTSUCCESS.data = {
+        courseNum: courseNum,
+        materialNum: materialNum,
+        onlineTestNum: onlineTestNum,
+        commentNum: commentNum
+    }
+    ctx.body = result.USERINFO.FINDCOUNTSUCCESS;
+}
+
+
+// 删除用户
+
+const deleteUser = async (ctx, next) => {
+    let data = {
+        user_id: ctx.request.body.user_id,
+        username: ctx.request.body.username
+    }
+    let doc = await findUserById(data);
+    if (doc.userType == 3) {
+        ctx.status = 200;
+        ctx.body = result.USERINFO.DELETEFAIL;
+    } else {
+        await removeUser(data);
+        ctx.status = 200;
+        ctx.body = result.USERINFO.DELETESUCCESS;
+    }
+
+}
+
 module.exports = {
     Login,
     Register,
@@ -308,5 +453,7 @@ module.exports = {
     getUserInformation,
     modifyUserInformation,
     favoriteCourse,
-    unfavoriteCourse
+    unfavoriteCourse,
+    getUserCountNum,
+    deleteUser
 }

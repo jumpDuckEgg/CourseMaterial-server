@@ -25,4 +25,6 @@ course.post('/findallresource',checkToken,courseController.findResourcesByCourse
 
 course.post('/removeOneResource',checkToken,courseController.removeResourcesByCourseId);
 
+course.post('/getCourseLimit',checkToken,courseController.getCourseLimit);
+
 module.exports = course;

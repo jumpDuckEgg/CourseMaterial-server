@@ -14,4 +14,8 @@ user.post('/favoriteCourse', userController.favoriteCourse);
 
 user.post('/unfavoriteCourse', userController.unfavoriteCourse);
 
+user.post('/getUserCountNum', userController.getUserCountNum);
+
+user.post('/deleteUser',userController.deleteUser);
+
 module.exports = user;

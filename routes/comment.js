@@ -14,6 +14,6 @@ comment.post('/modifyCommentPublish', commentController.modifyCommentPublish);
 
 comment.post('/deleteComment', commentController.deleteComment);
 
-
+comment.post('/getCommentLimit',commentController.getCommentLimit);
 
 module.exports = comment;
