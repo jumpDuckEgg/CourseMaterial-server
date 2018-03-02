@@ -37,6 +37,31 @@ const findCommentLimit = (data) => {
     })
 }
 
+const getCommentCount = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.count(data, (err, count) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(count)
+        })
+    })
+}
+
+
+// 分页评价
+
+const findCommentSpecial = (data) => {
+    return new Promise((resolve, reject) => {
+        commentModel.find(data.query, null, { skip: data.skip, limit: data.limit, sort: { createdTime: 1 } }, (err, doc) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
+
 const updateComment = (data) => {
     return new Promise((resolve, reject) => {
         commentModel.updateOne(data.query, data.options, (err, raw) => {
@@ -109,8 +134,12 @@ const getCommentByType = async (ctx, next) => {
     let data = {
         query: {
             comment_type: ctx.request.body.comment_type,
-            type_id: ctx.request.body.type_id
+            type_id: ctx.request.body.type_id,
+
         }
+    }
+    if (ctx.request.body.isPublish) {
+        data.query.isPublish = ctx.request.body.isPublish
     }
     let doc = await findAllComment(data);
     result.COMMENT.FINDALLSUCCESS.data = doc;
@@ -195,6 +224,28 @@ const getCommentLimit = async (ctx, next) => {
     ctx.body = result.COMMENT.FINDALLSUCCESS;
 }
 
+// 分页评价
+
+const getCommentSpecial = async (ctx, next) => {
+
+    let data = {
+        query: ctx.request.body.query,
+        skip: (ctx.request.body.page - 1) * ctx.request.body.limit,
+        limit: ctx.request.body.limit
+    }
+    let doc = await findCommentSpecial(data);
+    let countData = ctx.request.body.query;
+    let allCount = await getCommentCount(countData);
+
+    let commentsResult = {
+        comments: doc,
+        countNum: allCount
+    }
+    result.COMMENT.FINDALLSUCCESS.data = commentsResult;
+    ctx.status = 200;
+    ctx.body = result.COMMENT.FINDALLSUCCESS;
+}
+
 module.exports = {
     increaseComment,
     getCommentByType,
@@ -203,5 +254,6 @@ module.exports = {
     modifyCommentPublish,
     deleteComment,
     updateComments,
-    getCommentLimit
+    getCommentLimit,
+    getCommentSpecial
 }

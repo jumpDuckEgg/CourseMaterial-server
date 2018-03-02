@@ -27,4 +27,7 @@ course.post('/removeOneResource',checkToken,courseController.removeResourcesByCo
 
 course.post('/getCourseLimit',checkToken,courseController.getCourseLimit);
 
+// 分页查找课程
+course.post('/getCourseSpecial',checkToken,courseController.getCourseSpecial);
+
 module.exports = course;

@@ -16,4 +16,7 @@ comment.post('/deleteComment', commentController.deleteComment);
 
 comment.post('/getCommentLimit',commentController.getCommentLimit);
 
+// 分页
+comment.post('/getCommentSpecial',commentController.getCommentSpecial);
+
 module.exports = comment;

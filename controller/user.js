@@ -169,15 +169,24 @@ const Login = async (ctx, next) => {
         doc.token = token;
         console.log(doc)
         await AddUser(doc);
-        ctx.status = 200;
-        result.LOGIN.SUCCESS.data = {
-            token: token,
-            username: username,
-            userType: doc.userType,
-            userImage: doc.userImage,
-            user_id: doc.user_id
+        if (doc.disUsed) {
+            result.USERINFO.DISUSED.data = {
+                disUsedMessage: doc.disUsedMessage
+            }
+            ctx.status = 200;
+            ctx.body = result.USERINFO.DISUSED;
+        } else {
+            ctx.status = 200;
+            result.LOGIN.SUCCESS.data = {
+                token: token,
+                username: username,
+                userType: doc.userType,
+                userImage: doc.userImage,
+                user_id: doc.user_id
+            }
+            ctx.body = result.LOGIN.SUCCESS;
         }
-        ctx.body = result.LOGIN.SUCCESS;
+
     } else {
         ctx.status = 200;
         ctx.body = result.LOGIN.FAIL;
@@ -233,33 +242,44 @@ const getUserInformation = async (ctx, next) => {
 
 // 修改用户信息
 const modifyUserInformation = async (ctx, next) => {
-    let data = {
-        query: ctx.request.body.query,
-        update: ctx.request.body.update
-    }
-    let doc = await upadateUser(data);
-    result.USERINFO.UPDATESUCCESS.data = {
-        token: doc.token,
-        username: doc.username,
-        userType: doc.userType,
-        userImage: doc.userImage,
-        user_id: doc.user_id,
-        comments: doc.comments,
-        create_time: doc.create_time
-    }
-    if (ctx.request.body.update.userImage) {
+    let userData = ctx.request.body.query;
+
+    let doc = await findUserById(userData);
+    if (doc.userType == 3) {
+        ctx.status = 200;
+        result.USERINFO.DELETEFAIL.message = "没有权限修改"
+        ctx.body = result.USERINFO.DELETEFAIL;
+    } else {
         let data = {
-            query: {
-                people_id: doc.user_id
-            },
-            update: {
-                people_image: ctx.request.body.update.userImage
-            }
+            query: ctx.request.body.query,
+            update: ctx.request.body.update
         }
-        await updateComments(data);
+        let doc = await upadateUser(data);
+        result.USERINFO.UPDATESUCCESS.data = {
+            token: doc.token,
+            username: doc.username,
+            userType: doc.userType,
+            userImage: doc.userImage,
+            user_id: doc.user_id,
+            comments: doc.comments,
+            create_time: doc.create_time,
+            disUsed: doc.disUsed
+        }
+        if (ctx.request.body.update.userImage) {
+            let data = {
+                query: {
+                    people_id: doc.user_id
+                },
+                update: {
+                    people_image: ctx.request.body.update.userImage
+                }
+            }
+            await updateComments(data);
+        }
+        ctx.status = 200;
+        ctx.body = result.USERINFO.UPDATESUCCESS;
     }
-    ctx.status = 200;
-    ctx.body = result.USERINFO.UPDATESUCCESS;
+
 
 }
 // 收藏课程

@@ -14,7 +14,8 @@ const USERINFO = {
     COLLECTEXIST: { code: 61, message: '已收藏', data: null },
     FINDCOUNTSUCCESS: { code: 62, message: '查找测试成功', data: null },
     DELETESUCCESS: { code: 63, message: '删除用户成功', data: null },
-    DELETEFAIL:{code:64,message:"删除用户失败,你没有权限",data:null}
+    DELETEFAIL: { code: 64, message: "删除用户失败,你没有权限", data: null },
+    DISUSED: { code: 65, message: '封禁用户', data: null }
 }
 const COURSE = {
     CREATESUCCESS: { code: 7, message: "创建课程成功", data: null },

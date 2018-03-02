@@ -51,6 +51,17 @@ const findCourseLimit = (data) => {
     })
 }
 
+// 完成版特殊获取全部课程
+const findCourseSpecial = (data) => {
+    return new Promise((resolve, reject) => {
+        courseModel.find(data.query, null, { skip: data.skip, limit: data.limit, sort: { 'createdTime': -1 } }, (err, doc) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(doc)
+        })
+    })
+}
 
 
 
@@ -485,7 +496,25 @@ const removeResourcesByCourseId = async (ctx, next) => {
     ctx.body = result.MATERIAL.REMOVESUCCESS;
 }
 
+const getCourseSpecial = async (ctx, next) => {
+    // data.query, null, { skip: data.skip, limit: data.limit, sort: { 'createdTime': -1 }
+    let data = {
+        query: ctx.request.body.query,
+        skip: (ctx.request.body.page - 1) * ctx.request.body.limit,
+        limit: ctx.request.body.limit
+    }
+    let doc = await findCourseSpecial(data);
+    let countData = ctx.request.body.query;
+    let allCount = await getCourseCount(countData);
 
+    let courseResult = {
+        courses: doc,
+        countNum: allCount
+    }
+    result.COURSE.FINDALLSUCCESS.data = courseResult;
+    ctx.status = 200;
+    ctx.body = result.COURSE.FINDALLSUCCESS;
+}
 
 
 module.exports = {
@@ -506,5 +535,6 @@ module.exports = {
     updateOneCourse,
     findOneCourse,
     getCourseCount,
-    getCourseLimit
+    getCourseLimit,
+    getCourseSpecial
 }
