@@ -63,7 +63,7 @@ router.use('/homework', homework.routes(), homework.allowedMethods());
 
 router.use('/test', test.routes(), test.allowedMethods());
 
-router.use('/moniTest',moniTest.routes(),moniTest.allowdeMethods());
+router.use('/moniTest',moniTest.routes(), moniTest.allowedMethods());
 
 // router.post('/upload', upload.single('courseImage'), function (ctx, next) {
 //     ctx.body = "ok"

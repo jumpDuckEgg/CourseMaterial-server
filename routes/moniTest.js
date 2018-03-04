@@ -4,6 +4,6 @@ const Router = require('koa-router');
 
 const moniTest = new Router();
 
-moniTest.post('/createMoniTest',moniTestController.createMoniTest);
+moniTest.post('/createMoniTest', moniTestController.createMoniTest);
 
 module.exports = moniTest;
