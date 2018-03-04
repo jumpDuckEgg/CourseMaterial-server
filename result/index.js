@@ -62,6 +62,11 @@ const TEST = {
     FINDSUCCESS: { code: 26, message: "查找模拟试题成功", data: null }
 }
 
+const MONITEST = {
+    CREATESUCCESS :{code :27,message:'创建模拟试题成功',data:null}
+}
+
+
 module.exports = {
     LOGIN,
     REGISTER,
@@ -73,5 +78,6 @@ module.exports = {
     COMMENT,
     EXPERIMENT,
     HOMEWORK,
-    TEST
+    TEST,
+    MONITEST
 }

@@ -20,6 +20,7 @@ const comment = require('./routes/comment.js');
 const experiment = require('./routes/experiment.js');
 const homework = require('./routes/homework.js');
 const test = require('./routes/test.js');
+const moniTest = require('./routes/moniTest.js');
 const userController = require('./controller/user.js')
 const counterController = require('./controller/counter.js');
 
@@ -61,6 +62,8 @@ router.use('/experiment', experiment.routes(), experiment.allowedMethods());
 router.use('/homework', homework.routes(), homework.allowedMethods());
 
 router.use('/test', test.routes(), test.allowedMethods());
+
+router.use('/moniTest',moniTest.routes(),moniTest.allowdeMethods());
 
 // router.post('/upload', upload.single('courseImage'), function (ctx, next) {
 //     ctx.body = "ok"
