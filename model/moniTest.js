@@ -45,6 +45,10 @@ const moniTestSchema = new Schema({
     moniTest_type:{
         type:String,
         required:true
+    },
+    createdTime:{
+        type:Date,
+        default:new Date()
     }
 });
 

@@ -63,7 +63,10 @@ const TEST = {
 }
 
 const MONITEST = {
-    CREATESUCCESS :{code :27,message:'创建模拟试题成功',data:null}
+    CREATESUCCESS: { code: 27, message: '创建模拟试题成功', data: null },
+    FINDALLSUCCESS: { code: 28, message: "查找模拟试题成功", data: null },
+    UPDATESUCCESS: { code: 29, message: "修改模拟试题成功", data: null },
+    DELETESUCCESS: { code: 30, message: "删除模拟试题成功", data: null }
 }
 
 
