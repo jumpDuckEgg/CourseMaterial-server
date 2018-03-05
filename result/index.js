@@ -69,6 +69,10 @@ const MONITEST = {
     DELETESUCCESS: { code: 30, message: "删除模拟试题成功", data: null }
 }
 
+const MONIEXAM = {
+    CREATESUCCESS: { code: 31, message: '创建模拟试卷成功', data: null },
+}
+
 
 module.exports = {
     LOGIN,
@@ -82,5 +86,6 @@ module.exports = {
     EXPERIMENT,
     HOMEWORK,
     TEST,
-    MONITEST
+    MONITEST,
+    MONIEXAM
 }

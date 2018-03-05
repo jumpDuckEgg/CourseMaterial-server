@@ -111,6 +111,17 @@ const init = async () => {
             })
         }
     })
+    await counterModel.findOne({ couterType: 'moniExam' }, (err, res) => {
+        if (!res) {
+            let courseEntity = new counterModel({
+                couterType: 'moniExam',
+                couterNum: 0
+            });
+            courseEntity.save((res) => {
+                console.log("模拟试卷计数器初始化成功")
+            })
+        }
+    })
 }
 
 const getNextCounterNum = (counterType) => {

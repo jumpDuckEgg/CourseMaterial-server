@@ -86,6 +86,11 @@ const courseSchema = new Schema({
     collectNum:{
         type:Number,
         default:0
+    },
+    // 模拟试卷
+    moniexams:{
+        type:Array,
+        default:[]
     }
 });
 
