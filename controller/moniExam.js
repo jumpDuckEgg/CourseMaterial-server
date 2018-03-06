@@ -25,6 +25,31 @@ const findAllExamByOptions = (data) => {
     })
 }
 
+const findMoniExamById = (data) => {
+    return new Promise((resolve, reject) => {
+        moniExamModel.findOne(data, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+// 特殊只给在课程获取资源用
+
+const findMoniExamByIdSpecial = (data) => {
+    return new Promise((resolve, reject) => {
+        moniExamModel.findOne(data, { moniExam_id: 1, moniExam_title: 1 ,createdTime:1}, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+
+
+
 const updateMoniExamByOptions = (data) => {
     return new Promise((resolve, reject) => {
         moniExamModel.update(data.query, data.options, (err, raw) => {
@@ -123,5 +148,7 @@ module.exports = {
     createdMoniExam,
     getAllMoniExamByOptions,
     modifyMoniExamByOptions,
-    deleteMoniExam
+    deleteMoniExam,
+    findMoniExamById,
+    findMoniExamByIdSpecial
 }

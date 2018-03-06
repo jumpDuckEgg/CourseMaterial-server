@@ -18,4 +18,6 @@ user.post('/getUserCountNum', userController.getUserCountNum);
 
 user.post('/deleteUser',userController.deleteUser);
 
+user.post('/modifyUserPassword',userController.modifyUserPassword);
+
 module.exports = user;

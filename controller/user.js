@@ -255,27 +255,6 @@ const modifyUserInformation = async (ctx, next) => {
             update: ctx.request.body.update
         }
         let doc = await upadateUser(data);
-        result.USERINFO.UPDATESUCCESS.data = {
-            token: doc.token,
-            username: doc.username,
-            userType: doc.userType,
-            userImage: doc.userImage,
-            user_id: doc.user_id,
-            comments: doc.comments,
-            create_time: doc.create_time,
-            disUsed: doc.disUsed
-        }
-        if (ctx.request.body.update.userImage) {
-            let data = {
-                query: {
-                    people_id: doc.user_id
-                },
-                update: {
-                    people_image: ctx.request.body.update.userImage
-                }
-            }
-            await updateComments(data);
-        }
         ctx.status = 200;
         ctx.body = result.USERINFO.UPDATESUCCESS;
     }
@@ -464,6 +443,32 @@ const deleteUser = async (ctx, next) => {
 
 }
 
+const modifyUserPassword = async (ctx, next) => {
+
+    let userData = {
+        user_id: ctx.request.body.user_id,
+    }
+    let doc = await findUserById(userData);
+    console.log(doc)
+    if (doc.userType == 3) {
+        ctx.status = 200;
+        result.USERINFO.DELETEFAIL.message = "没有权限修改"
+        ctx.body = result.USERINFO.DELETEFAIL;
+    } else {
+        let data = {
+            query: {
+                user_id: ctx.request.body.user_id,
+            },
+            update: {
+                password: new Hashes.SHA1().b64(ctx.request.body.password), //加密
+            }
+        }
+        let doc = await upadateUser(data);
+        ctx.status = 200;
+        ctx.body = result.USERINFO.UPDATESUCCESS;
+    }
+}
+
 module.exports = {
     Login,
     Register,
@@ -475,5 +480,6 @@ module.exports = {
     favoriteCourse,
     unfavoriteCourse,
     getUserCountNum,
-    deleteUser
+    deleteUser,
+    modifyUserPassword
 }

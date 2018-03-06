@@ -5,6 +5,7 @@ const videoController = require('./video.js');
 const experimentController = require('./experiment.js');
 const homeworkController = require('./homework.js');
 const testController = require('./test.js');
+const moniExamController = require('./moniExam.js');
 const result = require('../result/index.js');
 // 操作数据库
 const AddCourse = (data) => {
@@ -388,6 +389,22 @@ const findResourcesByCourseId = async (ctx, next) => {
             return testController.findTestById({ 'test_id': value.test_id })
         })).then(result => {
             resourses['tests'] = result;
+        })
+    }
+    if (doc[0].moniexams.length > 0) {
+        await Promise.all(doc[0].moniexams.map((value, index) => {
+            return moniExamController.findMoniExamByIdSpecial({ 'moniExam_id': value.moniExam_id, 'moniExam_isPublish': true })
+        })).then(result => {
+            let temp = []
+            for (let i = 0; i < result.length; i++) {
+                if (result[i]) {
+                    temp.push(result[i])
+                }
+            }
+
+            resourses['moniexams'] = temp;
+
+
         })
     }
     ctx.status = 200;
