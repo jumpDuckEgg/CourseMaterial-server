@@ -19,6 +19,11 @@ const moniExamSchema = new Schema({
         type: Number,
         required: true
     },
+    // 模拟试题集
+    moniTests:{
+        type:Array,
+        default:[]
+    },
     // 模拟试卷创建时间
     createdTime: {
         type: Date,

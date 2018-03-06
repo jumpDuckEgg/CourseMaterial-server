@@ -71,6 +71,9 @@ const MONITEST = {
 
 const MONIEXAM = {
     CREATESUCCESS: { code: 31, message: '创建模拟试卷成功', data: null },
+    FINDALLSUCCESS: { code: 32, message: "查找模拟试卷成功", data: null },
+    UPDATESUCCESS: { code: 33, message: "修改模拟试卷成功", data: null },
+    DELETESUCCESS: { code: 34, message: "删除模拟试卷成功", data: null }
 }
 
 
