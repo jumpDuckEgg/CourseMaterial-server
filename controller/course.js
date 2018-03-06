@@ -5,8 +5,20 @@ const videoController = require('./video.js');
 const experimentController = require('./experiment.js');
 const homeworkController = require('./homework.js');
 const testController = require('./test.js');
-const moniExamController = require('./moniExam.js');
+const moniExamModel = require('../model/moniExam.js');
 const result = require('../result/index.js');
+// 特殊只给在课程获取资源用
+
+const findMoniExamByIdSpecial = (data) => {
+    return new Promise((resolve, reject) => {
+        moniExamModel.findOne(data, { moniExam_id: 1, moniExam_title: 1 ,createdTime:1}, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
 // 操作数据库
 const AddCourse = (data) => {
     return new Promise((resolve, reject) => {
@@ -393,7 +405,7 @@ const findResourcesByCourseId = async (ctx, next) => {
     }
     if (doc[0].moniexams.length > 0) {
         await Promise.all(doc[0].moniexams.map((value, index) => {
-            return moniExamController.findMoniExamByIdSpecial({ 'moniExam_id': value.moniExam_id, 'moniExam_isPublish': true })
+            return findMoniExamByIdSpecial({ 'moniExam_id': value.moniExam_id, 'moniExam_isPublish': true })
         })).then(result => {
             let temp = []
             for (let i = 0; i < result.length; i++) {
@@ -430,7 +442,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
             params: {
                 courseware_id: ctx.request.body.courseware_id
             }
-        }
+        } 
         await coursewareController.removeCourseware(coursewareData);
     }
     if (ctx.request.body['experiment_id']) {
