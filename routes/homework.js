@@ -4,6 +4,8 @@ const Router = require('koa-router');
 
 const homework = new Router();
 
-homework.post('/getHomeworkById', homeworkController.getHomeworkById);
+const checkToken = require('../token/checkToken.js');
+
+homework.post('/getHomeworkById',checkToken, homeworkController.getHomeworkById);
 
 module.exports = homework;

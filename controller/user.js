@@ -151,6 +151,21 @@ const findAllUsers = function (data) {
         })
     })
 }
+
+// 获取全部用户数量
+const getUserNum = (data) => {
+    return new Promise((resolve, reject) => {
+        userModel.count(data, (err, count) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(count);
+        })
+    })
+}
+
+
+
 //登陆接口
 
 const Login = async (ctx, next) => {
@@ -443,6 +458,7 @@ const deleteUser = async (ctx, next) => {
 
 }
 
+// 修改密码
 const modifyUserPassword = async (ctx, next) => {
 
     let userData = {
@@ -469,10 +485,40 @@ const modifyUserPassword = async (ctx, next) => {
     }
 }
 
+
+const getUserNumData = async (ctx, next) => {
+    let teacherNumData = {
+        userType: 1
+    }
+    let teacherCount = await getUserNum(teacherNumData);
+    let studentNumData = {
+        userType: 0
+    }
+    let studentCount = await getUserNum(studentNumData);
+    let courseCommentNum = await getCommentCount({});
+    let courseNumData = {
+        isPublish: 'examine'
+    }
+    let courseNum = await courseController.getCourseCount(courseNumData);
+
+    ctx.status = 200;
+
+    result.USERINFO.FINDCOUNTSUCCESS.data = {
+        teacherCount: teacherCount,
+        studentCount: studentCount,
+        courseNum: courseNum,
+        courseCommentNum: courseCommentNum
+    }
+    ctx.body = result.USERINFO.FINDCOUNTSUCCESS;
+}
+
+
+
 module.exports = {
     Login,
     Register,
     getAllUser,
+    findUserById,
     insertUserComment,
     removeUserComment,
     getUserInformation,
@@ -481,5 +527,6 @@ module.exports = {
     unfavoriteCourse,
     getUserCountNum,
     deleteUser,
-    modifyUserPassword
+    modifyUserPassword,
+    getUserNumData
 }

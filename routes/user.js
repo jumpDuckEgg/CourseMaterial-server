@@ -6,18 +6,20 @@ user.get('/', checkToken, userController.getAllUser);
 user.get('/information', (ctx, next) => {
     ctx.body = "欢迎来到user的information"
 });
-user.post('/getUserInformation', userController.getUserInformation);
+user.post('/getUserInformation', checkToken,userController.getUserInformation);
 
-user.post('/updateUserInformation', userController.modifyUserInformation);
+user.post('/updateUserInformation',checkToken, userController.modifyUserInformation);
 
-user.post('/favoriteCourse', userController.favoriteCourse);
+user.post('/favoriteCourse',checkToken, userController.favoriteCourse);
 
-user.post('/unfavoriteCourse', userController.unfavoriteCourse);
+user.post('/unfavoriteCourse',checkToken, userController.unfavoriteCourse);
 
-user.post('/getUserCountNum', userController.getUserCountNum);
+user.post('/getUserCountNum',checkToken, userController.getUserCountNum);
 
-user.post('/deleteUser',userController.deleteUser);
+user.post('/deleteUser',checkToken,userController.deleteUser);
 
-user.post('/modifyUserPassword',userController.modifyUserPassword);
+user.post('/modifyUserPassword',checkToken,userController.modifyUserPassword);
+
+user.get('/getUserNumData',checkToken,userController.getUserNumData);
 
 module.exports = user;

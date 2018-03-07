@@ -29,5 +29,7 @@ course.post('/getCourseLimit',checkToken,courseController.getCourseLimit);
 
 // 分页查找课程
 course.post('/getCourseSpecial',checkToken,courseController.getCourseSpecial);
+// 管理员获取待审批课程
+course.get('/getCourseByAdmin',checkToken,courseController.getCourseByAdmin);
 
 module.exports = course;

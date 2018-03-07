@@ -3,6 +3,8 @@ const Router = require('koa-router');
 
 const experiment = new Router();
 
-experiment.post('/getExperimentById',experimentController.getExperimentById);
+const checkToken = require('../token/checkToken.js');
+
+experiment.post('/getExperimentById',checkToken,experimentController.getExperimentById);
 
 module.exports = experiment;

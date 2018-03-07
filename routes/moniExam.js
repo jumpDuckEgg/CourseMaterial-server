@@ -3,12 +3,14 @@ const Router = require('koa-router');
 
 const moniExam = new Router();
 
-moniExam.post("/createdMoniExam",moniExamController.createdMoniExam);
+const checkToken = require('../token/checkToken.js');
 
-moniExam.post('/getAllMoniExamByOptions',moniExamController.getAllMoniExamByOptions);
+moniExam.post("/createdMoniExam", checkToken, moniExamController.createdMoniExam);
 
-moniExam.post('/modifyMoniExamByOptions',moniExamController.modifyMoniExamByOptions);
+moniExam.post('/getAllMoniExamByOptions', checkToken, moniExamController.getAllMoniExamByOptions);
 
-moniExam.post('/deleteMoniExam',moniExamController.deleteMoniExam);
+moniExam.post('/modifyMoniExamByOptions', checkToken, moniExamController.modifyMoniExamByOptions);
+
+moniExam.post('/deleteMoniExam', checkToken, moniExamController.deleteMoniExam);
 
 module.exports = moniExam;

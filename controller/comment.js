@@ -224,6 +224,22 @@ const getCommentLimit = async (ctx, next) => {
     ctx.body = result.COMMENT.FINDALLSUCCESS;
 }
 
+// 特殊返回评论集(管理员)
+
+const getCommentLimitByAdmin = async (ctx, next) => {
+    let data = {
+        query: {},
+        sort: {
+            createdTime: -1
+        },
+        limitnNum: 5
+    };
+    let docs = await findCommentLimit(data);
+    result.COMMENT.FINDALLSUCCESS.data = docs;
+    ctx.status = 200;
+    ctx.body = result.COMMENT.FINDALLSUCCESS;
+}
+
 // 分页评价
 
 const getCommentSpecial = async (ctx, next) => {
@@ -255,5 +271,6 @@ module.exports = {
     deleteComment,
     updateComments,
     getCommentLimit,
-    getCommentSpecial
+    getCommentSpecial,
+    getCommentLimitByAdmin
 }

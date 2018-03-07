@@ -5,8 +5,24 @@ const videoController = require('./video.js');
 const experimentController = require('./experiment.js');
 const homeworkController = require('./homework.js');
 const testController = require('./test.js');
-const moniExamController = require('./moniExam.js');
 const result = require('../result/index.js');
+const moniExamModel = require('../model/moniExam.js');
+// 特殊只给在课程获取资源用
+
+const findMoniExamByIdSpecial = (data) => {
+    return new Promise((resolve, reject) => {
+        moniExamModel.findOne(data, { moniExam_id: 1, moniExam_title: 1, createdTime: 1 }, (err, doc) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(doc);
+        })
+    })
+}
+
+
+
+
 // 操作数据库
 const AddCourse = (data) => {
     return new Promise((resolve, reject) => {
@@ -193,6 +209,25 @@ const getCourseByParams = async (ctx, next) => {
     ctx.status = 200;
     ctx.body = result.COURSE.FINDALLSUCCESS;
 }
+
+// 管理员获取待审核课程
+const getCourseByAdmin = async (ctx, next) => {
+    let data = {
+        query: {
+            isPublish: 'examine'
+        },
+        sort: {
+            createdTime: -1
+        },
+        limitnNum: 5
+    };
+    let doc = await findCourseLimit(data);
+    result.COURSE.FINDALLSUCCESS.data = doc;
+    ctx.status = 200;
+    ctx.body = result.COURSE.FINDALLSUCCESS;
+}
+
+
 
 const getCourseLimit = async (ctx, next) => {
     let data = {
@@ -393,7 +428,7 @@ const findResourcesByCourseId = async (ctx, next) => {
     }
     if (doc[0].moniexams.length > 0) {
         await Promise.all(doc[0].moniexams.map((value, index) => {
-            return moniExamController.findMoniExamByIdSpecial({ 'moniExam_id': value.moniExam_id, 'moniExam_isPublish': true })
+            return findMoniExamByIdSpecial({ 'moniExam_id': value.moniExam_id, 'moniExam_isPublish': true })
         })).then(result => {
             let temp = []
             for (let i = 0; i < result.length; i++) {
@@ -534,6 +569,7 @@ const getCourseSpecial = async (ctx, next) => {
 }
 
 
+
 module.exports = {
     findAllCourse,
     removeOneCourseArray,
@@ -553,5 +589,6 @@ module.exports = {
     findOneCourse,
     getCourseCount,
     getCourseLimit,
-    getCourseSpecial
+    getCourseSpecial,
+    getCourseByAdmin,
 }

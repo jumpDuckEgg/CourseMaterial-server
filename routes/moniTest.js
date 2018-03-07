@@ -4,12 +4,14 @@ const Router = require('koa-router');
 
 const moniTest = new Router();
 
-moniTest.post('/createMoniTest', moniTestController.createMoniTest);
+const checkToken = require('../token/checkToken.js');
 
-moniTest.post('/getAllMoniTestByOptions',moniTestController.getAllMoniTestByOptions);
+moniTest.post('/createMoniTest', checkToken, moniTestController.createMoniTest);
 
-moniTest.post('/modifyMoniTest',moniTestController.modifyMoniTest);
+moniTest.post('/getAllMoniTestByOptions', checkToken, moniTestController.getAllMoniTestByOptions);
 
-moniTest.post('/deleteMoniTest',moniTestController.deleteMoniTest);
+moniTest.post('/modifyMoniTest', checkToken, moniTestController.modifyMoniTest);
+
+moniTest.post('/deleteMoniTest', checkToken, moniTestController.deleteMoniTest);
 
 module.exports = moniTest;

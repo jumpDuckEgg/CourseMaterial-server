@@ -2,12 +2,13 @@ const config = require('../config/index.js');
 const qiuniu = require('qiniu');
 
 function qiniuToken(data) {
-    if(!data.time){
-        data.time=""
+    if (!data.time) {
+        data.time = ""
     }
+    data.time = new Date().getTime();
     let options = {
         scope: config.BUCKET,
-        saveKey: data.type + "/"+data.time+"$(fname)",
+        saveKey: data.type + "/" + data.time + "/$(fname)",
         returnBody: '{"key":"http://qiniu.fangunbayadan.cn/$(key)","hash":"$(etag)","fname":$(fname)}',
         callbackBodyType: 'application/json'
     };

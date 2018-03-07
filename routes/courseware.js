@@ -2,7 +2,9 @@ const coursewareController = require('../controller/courseware.js');
 const Router = require('koa-router');
 const courseware  =  new Router();
 
-courseware.post('/addCourseware',coursewareController.increaseCourseware);
+const checkToken = require('../token/checkToken.js');
+
+courseware.post('/addCourseware',checkToken,coursewareController.increaseCourseware);
 
 
 
