@@ -465,7 +465,7 @@ const removeResourcesByCourseId = async (ctx, next) => {
             params: {
                 courseware_id: ctx.request.body.courseware_id
             }
-        }
+        } 
         await coursewareController.removeCourseware(coursewareData);
     }
     if (ctx.request.body['experiment_id']) {
