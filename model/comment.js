@@ -42,8 +42,8 @@ const commentSchema = new Schema({
     },
      // 创建时间
      createdTime:{
-        type:Date,
-        default:new Date()
+        type:Number,
+        default:new Date().getTime()
     },
 })
 

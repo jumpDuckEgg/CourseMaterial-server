@@ -53,7 +53,7 @@ const getCommentCount = (data) => {
 
 const findCommentSpecial = (data) => {
     return new Promise((resolve, reject) => {
-        commentModel.find(data.query, null, { skip: data.skip, limit: data.limit, sort: { createdTime: 1 } }, (err, doc) => {
+        commentModel.find(data.query, null, { skip: data.skip, limit: data.limit, sort: { createdTime: -1 } }, (err, doc) => {
             if (err) {
                 reject(err)
             }
@@ -109,7 +109,8 @@ const increaseComment = async (ctx, next) => {
         type_id: ctx.request.body.type_id,
         comment_people: ctx.request.body.comment_people,
         people_image: ctx.request.body.people_image,
-        people_id: Number(ctx.request.body.user_id)
+        people_id: Number(ctx.request.body.user_id),
+        createdTime:ctx.request.body.createdTime||(new Date).getTime()
     });
 
     await addComment(comment);

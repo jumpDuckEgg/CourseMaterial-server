@@ -250,6 +250,7 @@ const getUserInformation = async (ctx, next) => {
         user_id: Number(ctx.request.body.user_id)
     }
     let doc = await findUserById(data);
+    console.log(doc)
     result.USERINFO.FINDSUCCESS.data = doc;
     ctx.status = 200;
     ctx.body = result.USERINFO.FINDSUCCESS
@@ -288,11 +289,12 @@ const favoriteCourse = async (ctx, next) => {
     };
     let findData = {
         query: {
+            user_id:ctx.request.body.user_id,
             collections: { $elemMatch: { course_id: ctx.request.body.course_id, course_name: ctx.request.body.course_name, courseImage: ctx.request.body.courseImage } }
         }
     }
     let doc = await findUserByOptions(findData);
-
+ 
     if (doc) {
         ctx.status = 200;
         ctx.body = result.USERINFO.COLLECTEXIST;
