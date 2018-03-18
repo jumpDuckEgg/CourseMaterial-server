@@ -5,7 +5,7 @@ module.exports = function (user_id) {
         user_id: user_id
     },
         config.TOKEN, {
-            expiresIn: '1h'
+            expiresIn: '5h'
         }
     );
     return token;
